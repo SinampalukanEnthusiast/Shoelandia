@@ -1,0 +1,10 @@
+{% extends "store/main.html" %} {% load static %} {% block content %} detail
+view
+
+<img src="{{product.imageURL}}" alt="randommustang" class="carro" />
+<h4>{{product.get_full_name}}</h4>
+<h3>${{product.price}}</h3>
+
+<p>{{product.description}}</p>
+
+{% endblock content %}

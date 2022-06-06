@@ -1,0 +1,11 @@
+{% extends "store/main.html" %} {% load static %} {% load crispy_forms_tags %}
+{% block content %}
+
+<h4>Register Page</h4>
+
+<form class="bootstrap4" method="POST">{% csrf_token %} {% crispy form %}</form>
+
+<a class="btn btn-link" href="{% url 'login' %}" role="button"
+  >Already have an account? Login!</a
+>
+{% endblock content %}
