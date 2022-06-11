@@ -15,18 +15,17 @@ class Customer(models.Model):
 
 
 class Product(models.Model):
-    # Cars
-    car_name = models.CharField(max_length=200, null=True)
+    product_name = models.CharField(max_length=200, null=True)
     brand_name = models.CharField(max_length=100, null=True)
     # max_digits to 9
-    price = models.DecimalField(max_digits=7, decimal_places=2)
+    price = models.DecimalField(max_digits=9, decimal_places=2)
     image = models.ImageField(null=True, blank=True)
     description = models.TextField()
     slug = models.SlugField(max_length=255)
 
     @property
     def get_full_name(self):
-        return f'{self.brand_name} {self.car_name}'
+        return f'{self.brand_name} {self.product_name}'
 
     @property
     def imageURL(self):
@@ -37,7 +36,7 @@ class Product(models.Model):
         return url
 
     def __str__(self):
-        return f'{self.brand_name} {self.car_name}'
+        return f'{self.brand_name} {self.product_name}'
 
 
 class Order(models.Model):
@@ -75,7 +74,7 @@ class OrderItem(models.Model):
         return total
 
     def __str__(self):
-        myOrderItems = f"{self.product.car_name} {self.product.brand_name}"
+        myOrderItems = f"{self.product.product_name} {self.product.brand_name}"
         return f'{myOrderItems}, {self.quantity}, '
 
 
