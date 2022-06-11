@@ -3,7 +3,7 @@ from .models import *
 
 
 class ProductAdmin(admin.ModelAdmin):
-    prepopulated_fields = {"slug": ("car_name",)}
+    prepopulated_fields = {"slug": ("product_name",)}
 
 
 # Register your models here.
