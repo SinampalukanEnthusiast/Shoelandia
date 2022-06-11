@@ -24,6 +24,7 @@ INSTALLED_APPS = [
 
     'store',
     'crispy_forms',
+    'basket',
     # 'storages', # uncomment when deploying
 
 ]
@@ -93,3 +94,4 @@ USE_TZ = True
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'

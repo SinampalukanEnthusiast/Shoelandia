@@ -7,7 +7,8 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('store.urls'))
+    path('', include('store.urls')),
+    path('basket/', include('basket.urls')),
 ]
 
 # adds in the images folder as a reachable url
