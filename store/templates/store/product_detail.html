@@ -1,10 +1,88 @@
-{% extends "store/main.html" %} {% load static %} {% block content %} detail
-view
+{% extends "store/main.html" %} {% load static %} {% block content %}
+<div class="container">
+  <div class="row py-5">
+    <div class="col-md-8 mr-5">
+      <div class="card py-5 mx-auto">
+        <img
+          class="card-img mx-auto"
+          data-src="holder.js/100px260/"
+          alt="100%x260"
+          style="width: 50%; display: block"
+          src="{{product.imageURL}}"
+          data-holder-rendered="true"
+        />
+      </div>
+    </div>
+    <div class="col-md">
+      <div class="card">
+        <div class="card-body">
+          <h4>{{product.get_full_name}}</h4>
+          <h3>${{product.price}}</h3>
 
-<img src="{{product.imageURL}}" alt="randommustang" class="carro" />
-<h4>{{product.get_full_name}}</h4>
-<h3>${{product.price}}</h3>
+          <p>{{product.description}}</p>
 
-<p>{{product.description}}</p>
+          <button
+            type="button"
+            id="add-button"
+            value="{{product.id}}"
+            class="btn btn-secondary"
+          >
+            Add to basket
+          </button>
 
-{% endblock content %}
+          <!-- <div style="flex: 1">
+            <p class="quantity">x2</p>
+            <div class="quantity">
+              <img
+                data-product="{{product.id}}"
+                data-action="add"
+                id="add-basket"
+                value="1"
+                class="chg-quantity add-basket"
+                src="{% static 'images/arrow-up.png' %}"
+              />
+              <img
+                data-product="{{item.product.id}}"
+                data-action="remove"
+                class="chg-quantity update-cart"
+                src="{% static 'images/arrow-down.png' %}"
+              />
+            </div>
+          </div> -->
+          <div class="d-inline">
+            <label for="select">Qty</label>
+            <select id="select">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $(document).on("click", "#add-button", function (e) {
+      e.preventDefault();
+      $.ajax({
+        type: "POST",
+        url: '{% url "basket_add" %}',
+        data: {
+          product_id: $("#add-button").val(),
+          product_qty: $("#select option:selected").text(),
+          csrfmiddlewaretoken: "{{csrf_token}}",
+          action: "POST",
+        },
+        success: function (json) {
+          console.log(json);
+          document.getElementById("basket-qty").innerHTML = json.qty;
+        },
+        error: function (xhr, errmsg, err) {},
+      });
+    });
+  </script>
+
+  {% endblock content %}
+</div>
