@@ -17,18 +17,12 @@ class Basket():
         self.basket = basket
 
     def add(self, product, qty):
-        # product_id = str(product.id)
-        # if product_id in self.basket:
-        #     self.basket[product_id]['qty'] = qty
-        # else:
-        #     self.basket[product_id] = {'price': str(product_id), 'qty': qty}
+        product_id = str(product.id)
+        if product_id in self.basket:
+            self.basket[product_id]['qty'] = qty
+        else:
+            self.basket[product_id] = {'price': str(product_id), 'qty': qty}
 
-        # self.save()
-
-        product_id = product.id
-        if product_id not in self.basket:
-            self.basket[product_id] = {'price': str(
-                product.price), 'qty': int(qty)}
         self.save()
 
     def __iter__(self):
@@ -62,6 +56,13 @@ class Basket():
             del self.basket[product_id]
             print("deleted successfully")
             self.save()
+
+    def update(self, product, qty):
+        product_id = str(product)
+        product_qty = qty
+        if product_id in self.basket:
+            self.basket[product_id]['qty'] = product_qty
+        self.save()
 
     def save(self):
         self.session.modified = True

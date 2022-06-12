@@ -15,7 +15,7 @@
       </div>
       <div class="col-md-9 col-lg-10 ps-md-3 ps-lg-10">
         <a
-          href="{{ product.get_absolute_url }}"
+          href="{% url 'product_detail' product.slug %}"
           class="text-decoration-none text-reset"
         >
           <h1 class="h5 pt-2">{{ product.get_full_name }}</h1>
@@ -103,12 +103,12 @@
     var prodid = $(this).data("index");
     $.ajax({
       type: "POST",
-      url: "#",
+      url: "{% url 'basket_update' %}",
       data: {
         product_id: $(this).data("index"),
         product_qty: $("#select" + prodid + " option:selected").text(),
         csrfmiddlewaretoken: "{{csrf_token}}",
-        action: "post",
+        action: "POST",
       },
       success: function (json) {
         document.getElementById("basket-qty").innerHTML = json.qty;

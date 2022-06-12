@@ -32,7 +32,21 @@ def basket_delete(request):
         product_id = int(request.POST.get('product_id'))
         basket.delete(product=product_id)
 
-        basketqty = basket.__len__()
-        baskettotal = basket.get_total_price()
-        response = JsonResponse({'qty': basketqty, 'subtotal': baskettotal})
+        basket_qty = basket.__len__()
+        basket_total = basket.get_total_price()
+        response = JsonResponse({'qty': basket_qty, 'subtotal': basket_total})
+        return response
+
+
+def basket_update(request):
+    basket = Basket(request)
+
+    if request.POST.get('action') == 'POST':
+        product_id = int(request.POST.get('product_id'))
+        product_qty = int(request.POST.get('product_qty'))
+        basket.update(product=product_id, qty=product_qty)
+
+        basket_qty = basket.__len__()
+        basket_total = basket.get_total_price()
+        response = JsonResponse({'qty': basket_qty, 'subtotal': basket_total})
         return response
