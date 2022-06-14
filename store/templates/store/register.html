@@ -5,7 +5,7 @@
 
 <form class="bootstrap4" method="POST">{% csrf_token %} {% crispy form %}</form>
 
-<a class="btn btn-link" href="{% url 'login' %}" role="button"
+<a class="btn-link" href="{% url 'login' %}" role="button"
   >Already have an account? Login!</a
 >
 {% endblock content %}

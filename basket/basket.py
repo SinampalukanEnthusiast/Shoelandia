@@ -6,10 +6,13 @@ from store.models import Product
 
 
 class Basket():
+    """
+    Initialize a basket class, 
+    associate it with the browser session
+    """
+
     def __init__(self, request):
-
         self.session = request.session
-
         basket = self.session.get('skey')
 
         if 'skey' not in request.session:
@@ -21,8 +24,9 @@ class Basket():
         if product_id in self.basket:
             self.basket[product_id]['qty'] = qty
         else:
-            self.basket[product_id] = {'price': str(product_id), 'qty': qty}
+            self.basket[product_id] = {'price': str(product.price), 'qty': qty}
 
+        print(self.basket)
         self.save()
 
     def __iter__(self):
@@ -39,11 +43,16 @@ class Basket():
             yield item
 
     def __len__(self):
-        # sum = 0
+        """
+        The oneliner is equivalent to
+        sum = 0
+        for item in self.basket.values():
+            sum += item['qty']
+        retun sum
 
-        # for item in self.basket.values():
-        #     sum += item['qty']
-        # #print(f'len: {sum}')
+        Returns:
+            This returns the number of items in a basket
+        """
         return sum(item['qty'] for item in self.basket.values())
 
     def get_total_price(self):
@@ -51,10 +60,8 @@ class Basket():
 
     def delete(self, product):
         product_id = str(product)
-        print(f'product id: {product} \nself.basket: {self.basket}')
         if product_id in self.basket:
             del self.basket[product_id]
-            print("deleted successfully")
             self.save()
 
     def update(self, product, qty):
