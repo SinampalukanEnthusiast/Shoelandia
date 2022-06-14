@@ -24,6 +24,7 @@ INSTALLED_APPS = [
 
     'store',
     'crispy_forms',
+    'basket',
     # 'storages', # uncomment when deploying
 
 ]
@@ -51,6 +52,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'basket.context_processor.basket',
             ],
         },
     },
@@ -93,3 +95,4 @@ USE_TZ = True
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
