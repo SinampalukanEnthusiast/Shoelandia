@@ -28,6 +28,12 @@
 
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}" />
     <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'css/basket.css' %}"
+    />
+
+    <link
       rel="shortcut icon"
       type="image/png"
       href="{% static 'favicon.ico' %}"
@@ -95,127 +101,9 @@
     />
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light bg-mine">
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarTogglerDemo03"
-        aria-controls="navbarTogglerDemo03"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <a class="navbar-brand" href="{% url 'home' %}">Shoelandia </a>
-
-      <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-          <li class="nav-item active">
-            <a class="nav-link" href="{% url 'store' %}"
-              >Store <span class="sr-only">(current)</span></a
-            >
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-          </li>
-          <li class="nav-item">
-            <div class="btn-group dropright">
-              <button
-                type="button"
-                class="btn dropdown-toggle"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                FAQs
-              </button>
-              <div class="dropdown-menu">
-                <button class="dropdown-item" type="button">
-                  <a class="nav-link p-0" href="{% url 'home' %}">About </a>
-                </button>
-                <button class="dropdown-item" type="button">
-                  <a class="nav-link p-0" href="{% url 'home' %}">Pricing </a>
-                </button>
-                <button class="dropdown-item" type="button">
-                  <a class="nav-link p-0" href="{% url 'home' %}"
-                    >Shipping locations
-                  </a>
-                </button>
-              </div>
-            </div>
-          </li>
-        </ul>
-        {% if request.user.is_authenticated %}
-
-        <form class="form-inline my-2 my-lg-0 mr-2">
-          <input
-            class="form-control mr-sm-2"
-            type="search"
-            placeholder="Search"
-            aria-label="Search"
-          />
-          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
-            Search
-          </button>
-        </form>
-        <div class="form-inline my-2 my-lg-0">
-          <div class="dropdown show">
-            <a
-              class="btn btn-primary dropdown-toggle mr-2"
-              href="#"
-              role="button"
-              id="dropdownMenuLink"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-              >Hello, {{request.user}}
-            </a>
-
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-              <a class="dropdown-item" href="#">Profile</a>
-              <a class="dropdown-item" href="#">Another action</a>
-              <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
-            </div>
-          </div>
-          <!-- <a href="{% url 'cart' %}">
-            <img id="cart-icon" src="{% static 'images/cart.png' %}" />
-          </a> -->
-
-          <a
-            type="button"
-            role="button"
-            class="btn btn-outline-success p-1"
-            href="{% url 'basket_summary' %}"
-            >Basket
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              class="bi bi-cart3"
-              viewBox="0 0 16 16"
-            >
-              <path
-                d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"
-              />
-            </svg>
-
-            {% with total_qty=basket|length %}
-            <div id="basket-qty" class="d-inline-flex">
-              {% if total_qty > 0 %} {{total_qty}} {% else %} 0 {% endif %}
-            </div>
-            {% endwith %}
-          </a>
-          {% endif %}
-        </div>
-      </div>
-    </nav>
-    <div class="container">
-      <br />
-      {% for message in messages %}
-      <p id="messages" class="alert alert-info">{{message}}</p>
-      {% endfor %} {% block content %} {% endblock content %}
+    <div>
+      {% include "store/nav.html" %} {% block content %} {% endblock content %}
+      {% include "store/footer.html" %}
     </div>
 
     <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
