@@ -13,7 +13,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 
-@login_required(login_url='login')
+# @login_required(login_url='login')
 def home(request):
     context = {}
     return render(request, 'store/home.html', context)
@@ -65,7 +65,7 @@ def logoutUser(request):
     return redirect('login')
 
 
-@login_required(login_url='login')
+# @login_required(login_url='login')
 def store(request):
 
     products = Product.objects.all()
