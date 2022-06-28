@@ -1,14 +1,29 @@
 {% extends "store/main.html" %} {% load static %} {% load crispy_forms_tags %}
 {% block content %}
 <div class="container-fluid justify-content-center">
-  <div class="pd-8">
-    <h4>Login Page</h4>
+  <div class="pd-8"></div>
+</div>
 
-    <form class="bootstrap4" method="POST">
-      {% csrf_token %} {% crispy form %}
-    </form>
+<div class="container-fluid">
+  <div class="row no-gutter">
+    <div class="col-md-12">
+      <div class="login d-flex align-items-center py-5">
+        <div class="container">
+          <div class="row">
+            <div class="col-12 col-lg-7 mx-auto">
+              <h4>Login Page</h4>
+              <form class="bootstrap4" method="POST">
+                {% csrf_token %} {% crispy form %}
+              </form>
 
-    <a href="{% url 'register' %}"> Dont have an account yet? Register!</a>
+              <a href="{% url 'register' %}">
+                Dont have an account yet? Register!</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock content %}

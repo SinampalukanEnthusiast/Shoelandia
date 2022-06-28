@@ -2,16 +2,7 @@ from distutils.text_file import TextFile
 from django.db import models
 from django.contrib.auth.models import User
 from django.forms import SlugField
-
-
-class Customer(models.Model):
-    user = models.OneToOneField(
-        User, on_delete=models.CASCADE, null=True, blank=True)
-    name = models.CharField(max_length=200, null=True)
-    email = models.CharField(max_length=200, null=True)
-
-    def __str__(self):
-        return self.name
+from django.conf import settings
 
 
 class Product(models.Model):
@@ -37,6 +28,16 @@ class Product(models.Model):
 
     def __str__(self):
         return f'{self.brand_name} {self.product_name}'
+
+
+class Customer(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
+    name = models.CharField(max_length=200, null=True)
+    email = models.CharField(max_length=200, null=True)
+
+    def __str__(self):
+        return self.name
 
 
 class Order(models.Model):

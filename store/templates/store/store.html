@@ -19,13 +19,14 @@
             <strong>${{product.price|floatformat:2}}</strong>
           </h5>
           <p class="card-text">{{product.description}}</p>
-          <a
-            href="#"
-            class="btn btn-primary"
-            data-product="{{product.id}}"
-            data-action="add"
-            >Add to cart</a
+          <button
+            type="button"
+            id="add-button"
+            value="{{product.id}}"
+            class="btn btn-secondary"
           >
+            Add to cart
+          </button>
 
           <a
             class="btn btn-outline-success"
@@ -38,4 +39,33 @@
     {% endfor %}
   </div>
 </div>
+
+<script>
+  $(document).on("click", "#add-button", function (e) {
+    e.preventDefault();
+    $.ajax({
+      type: "POST",
+      url: '{% url "basket_add" %}',
+      data: {
+        product_id: $("#add-button").val(),
+        product_qty: 1,
+        csrfmiddlewaretoken: "{{csrf_token}}",
+        action: "POST",
+      },
+      success: function (json) {
+        console.log(json);
+        if (parseInt(document.getElementById("basket-qty").innerHTML) > 0) {
+          value = parseInt(document.getElementById("basket-qty").innerHTML);
+          value += json.qty;
+          console.log("value: " + value);
+          document.getElementById("basket-qty").innerHTML = value;
+        } else {
+          document.getElementById("basket-qty").innerHTML = json.qty;
+          console.log("<0");
+        }
+      },
+      error: function (xhr, errmsg, err) {},
+    });
+  });
+</script>
 {% endblock content %}

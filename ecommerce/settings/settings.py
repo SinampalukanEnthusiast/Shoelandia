@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'store',
     'crispy_forms',
     'basket',
+    'account',
     # 'storages', # uncomment when deploying
 
 ]
@@ -96,3 +97,11 @@ USE_TZ = True
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+
+AUTH_USER_MODEL = 'account.UserBase'
+LOGIN_REDIRECT_URL = '/store/'
+LOGIN_URL = '/login/'
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
