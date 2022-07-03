@@ -4,11 +4,11 @@ Summary{%endblock %} {% block content %}
 <main class="pt-5">
   <div class="container" style="max-width: 1000px">
     <div class="col-12">
-      <h1 class="h2">Your Dashboard</h1>
+      <h1 class="h2">Hello, {{request.user}}!</h1>
     </div>
     <div class="col-12 d-flex justify-content-between">
       <div>Manage your <b>orders</b> and personal details</div>
-      <div><a href="#">Change Details</a></div>
+      <div><a href="{% url 'dashboard_edit' %}">Change Details</a></div>
     </div>
     <hr />
   </div>

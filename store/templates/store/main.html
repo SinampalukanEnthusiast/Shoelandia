@@ -105,7 +105,9 @@
       {% include "store/nav.html" %} {% block content %} {% endblock content %}
       {% include "store/footer.html" %}
     </div>
-
+    {% for message in messages %}
+    <p id="messages" class="alert alert-info">{{message}}</p>
+    {% endfor %}
     <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
   </body>
 </html>

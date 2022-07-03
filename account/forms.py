@@ -1,15 +1,66 @@
-from dataclasses import field
-import email
+from dataclasses import Field
 from django import forms
+from django.contrib.auth.models import User
 
 from .models import UserBase
+from crispy_forms.helper import FormHelper, Layout
+from crispy_forms.layout import Submit
+
+
+class LoginForm(forms.ModelForm):
+
+    email = forms.EmailField()
+    password = forms.CharField(widget=forms.PasswordInput,)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.add_input(
+            Submit('submit', 'Login', css_class='btn btn-primary btn-block py-2 mb-4 mt-5 fw500 w-100'))
+
+    class Meta:
+        model = UserBase
+        fields = ['email', 'password']
+
+
+class DashboardEditForm(forms.ModelForm):
+
+    email = forms.EmailField(widget=forms.TextInput(
+        attrs={"readonly": True, "placeholder": "email"}), required=True)
+    user_name = forms.CharField(widget=forms.TextInput(
+        attrs={"readonly": True}), required=True)
+    #password = forms.CharField(widget=forms.PasswordInput,)
+    first_name = forms.CharField(required=False)
+    about = forms.CharField(
+        max_length=150, widget=forms.Textarea(attrs={"placeholder": "Description about you..."}), required=False)
+    address = forms.CharField(required=False, widget=forms.TextInput(
+        attrs={"placeholder": "House No, Lot No., Street Name... "}))
+    city = forms.CharField(required=False, widget=forms.TextInput(
+        attrs={"placeholder": "City or Municipality Name..."}))
+    province = forms.CharField(required=False, widget=forms.TextInput(
+        attrs={"placeholder": "Province Name..."}))
+    zipcode = forms.CharField(required=False, widget=forms.TextInput(
+        attrs={"placeholder": "Area code..."}))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.add_input(
+            Submit('submit', 'Update', css_class='btn btn-primary btn-block py-2 mb-4 mt-5 fw500 w-100'))
+
+    class Meta:
+        model = UserBase
+        fields = ['email', 'user_name', 'first_name', 'about',
+                  'address', 'city', 'province', 'zipcode']
 
 
 class RegistrationForm(forms.ModelForm):
     user_name = forms.CharField(
         label='Enter username', min_length=4, max_length=50, help_text='Required')
     email = forms.EmailField(max_length=100, help_text='Required', error_messages={
-                             'required': 'Email is needed'})
+        'required': 'Email is needed'})
     password = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(
         label='Repeat Password', widget=forms.PasswordInput)
