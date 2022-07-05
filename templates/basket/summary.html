@@ -70,8 +70,7 @@
                </h4>
             </div>
             <div class="col"><h4 class="col font-weight-bold" id="subtotal">
-                          &#x20b1; 
-                {{ basket.get_total_price }} </h4></div>
+                          &#x20b1; {{ basket.get_total_price }} </h4></div>
           </div>
           <div class="row">
             <div class="col">
@@ -94,7 +93,7 @@
                 &#x20b1; {{basket.get_total_price}} + 50 </h4></div>
           </div>
           <div class="row pt-5">
-           <button type="button" class="btn btn-success btn-block">Checkout</button>
+           <a href="{% url 'deliverychoices' %}" class="btn btn-success btn-block">Checkout</a> 
           </div>
           
               

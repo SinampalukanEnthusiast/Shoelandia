@@ -1,8 +1,10 @@
 
 
+from ast import Del
 from decimal import Decimal
-from math import prod
 from store.models import Product
+from checkout.models import DeliveryOptions
+from django.conf import settings
 
 
 class Basket():
@@ -13,10 +15,9 @@ class Basket():
 
     def __init__(self, request):
         self.session = request.session
-        basket = self.session.get('skey')
-
-        if 'skey' not in request.session:
-            basket = self.session['skey'] = {}
+        basket = self.session.get(settings.BASKET_SESSION_ID)
+        if settings.BASKET_SESSION_ID not in request.session:
+            basket = self.session[settings.BASKET_SESSION_ID] = {}
         self.basket = basket
 
     def add(self, product, qty):
@@ -55,8 +56,32 @@ class Basket():
         """
         return sum(item['qty'] for item in self.basket.values())
 
+    def get_subtotal(self):
+        subtotal = sum(Decimal(item['price']) * item['qty']
+                       for item in self.basket.values())
+        return subtotal
+
     def get_total_price(self):
-        return sum(Decimal(item['price']) * item['qty'] for item in self.basket.values())
+        total = self.get_subtotal()
+        newprice = 0.00
+        if "purchase" in self.session:
+            newprice = DeliveryOptions.objects.get(
+                id=self.session["purchase"]["delivery_id"]).delivery_price
+        total += Decimal(newprice)
+        return total
+
+    def get_delivery_price(self):
+        price = 0.00
+        if "purchase" in self.session:
+            price = DeliveryOptions.objects.get(
+                id=self.session["purchase"]["delivery_id"]).delivery_price
+        return price
+
+    def basket_update_delivery(self, deliveryprice=0):
+        subtotal = sum(Decimal(item['price']) * item['qty']
+                       for item in self.basket.values())
+        total = subtotal + Decimal(deliveryprice)
+        return total
 
     def delete(self, product):
         product_id = str(product)
@@ -73,3 +98,10 @@ class Basket():
 
     def save(self):
         self.session.modified = True
+
+    def clear(self):
+        # Remove basket from session
+        del self.session[settings.BASKET_SESSION_ID]
+        # del self.session["address"]
+        del self.session["purchase"]
+        self.save()

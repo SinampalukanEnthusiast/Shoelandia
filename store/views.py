@@ -1,47 +1,12 @@
-from itertools import product
-from django.shortcuts import get_object_or_404, redirect, render
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-import json
-import datetime
-
-from store.forms import *
-
+from django.shortcuts import get_object_or_404, render
 from .models import *
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 
 
-@login_required(login_url='login')
 def home(request):
     context = {}
     return render(request, 'store/home.html', context)
 
 
-def register(request):
-    if request.user.is_authenticated:
-        return redirect('home')
-    else:
-        form = RegistrationForm()
-        if request.method == 'POST':
-            form = RegistrationForm(request.POST)
-            if form.is_valid():
-                form.save()
-                customer_username = form.cleaned_data['username']
-                customer_name = f"{form.cleaned_data['first_name']} {form.cleaned_data['last_name']}"
-                email = form.cleaned_data['email']
-                user = User.objects.get(username=customer_username)
-                customer = Customer.objects.create(
-                    name=customer_name, email=email)
-                customer.user = user
-                customer.save()
-                messages.success(request, "Account created!")
-                return redirect('login')
-        context = {'form': form}
-        return render(request, 'store/register.html', context)
-
-
-@login_required(login_url='login')
 def store(request):
 
     products = Product.objects.all()
@@ -51,6 +16,5 @@ def store(request):
 
 def product_detail(request, slug):
     product = get_object_or_404(Product, slug=slug)
-
     context = {'product': product}
     return render(request, 'store/product_detail.html', context)

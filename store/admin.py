@@ -6,11 +6,8 @@ class ProductAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("product_name",)}
 
 
-# Register your models here.
-
 admin.site.register(Product, ProductAdmin)
-
-admin.site.register(Customer)
-admin.site.register(Order)
-admin.site.register(OrderItem)
-admin.site.register(ShippingAddress)
+# admin.site.register(ShippingAddress)
+# admin.site.register(Customer)
+# admin.site.register(Order)
+# admin.site.register(OrderItem)

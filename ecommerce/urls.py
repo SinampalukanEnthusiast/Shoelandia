@@ -10,6 +10,8 @@ urlpatterns = [
     path('', include('store.urls')),
     path('basket/', include('basket.urls')),
     path('', include('account.urls')),
+    path('checkout/', include('checkout.urls')),
+
 ]
 
 # urlpatterns = [

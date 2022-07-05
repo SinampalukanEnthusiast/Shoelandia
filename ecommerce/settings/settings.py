@@ -26,6 +26,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     'basket',
     'account',
+    'orders',
+    'checkout',
     # 'storages', # uncomment when deploying
 
 ]
@@ -45,7 +47,7 @@ ROOT_URLCONF = 'ecommerce.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -103,5 +105,5 @@ AUTH_USER_MODEL = 'account.UserBase'
 LOGIN_REDIRECT_URL = '/store/'
 LOGIN_URL = '/login/'
 
-
+BASKET_SESSION_ID = "basket"
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
