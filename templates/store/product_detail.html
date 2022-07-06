@@ -1,36 +1,39 @@
 {% extends "store/main.html" %} {% load static %} {% block content %}
-<div class="container">
-  <div class="row py-5">
-    <div class="col-md-8 mr-5">
-      <div class="card py-5 mx-auto">
-        <img
-          class="card-img mx-auto"
-          data-src="holder.js/100px260/"
-          alt="100%x260"
-          style="width: 50%; display: block"
-          src="{{product.imageURL}}"
-          data-holder-rendered="true"
-        />
+
+<div class="container-fluid d-flex justify-content-center">
+  <div class="col d-flex">
+    <div class="col-lg-3"></div>
+    <div class="row">
+      <div class="col mr-5">
+        <div class="card container-fluid">
+          <img
+            class="rounded mx-auto d-block border"
+            data-src="holder.js/100px260/"
+            alt="100%x260"
+            style="max-width: 40rem; min-height: 40rem"
+            src="{{product.imageURL}}"
+            data-holder-rendered="true"
+          />
+        </div>
       </div>
-    </div>
-    <div class="col-md">
-      <div class="card">
-        <div class="card-body">
-          <h4>{{product.get_full_name}}</h4>
-          <h3>${{product.price}}</h3>
+      <div class="col">
+        <div class="card">
+          <div class="card-body">
+            <h4>{{product.get_full_name}}</h4>
+            <h3>&#x20b1;{{product.price}}</h3>
 
-          <p>{{product.description}}</p>
+            <p>{{product.description}}</p>
 
-          <button
-            type="button"
-            id="add-button"
-            value="{{product.id}}"
-            class="btn btn-secondary"
-          >
-            Add to basket
-          </button>
+            <button
+              type="button"
+              id="add-button"
+              value="{{product.id}}"
+              class="btn btn-secondary"
+            >
+              Add to basket
+            </button>
 
-          <!-- <div style="flex: 1">
+            <!-- <div style="flex: 1">
             <p class="quantity">x2</p>
             <div class="quantity">
               <img
@@ -49,40 +52,41 @@
               />
             </div>
           </div> -->
-          <div class="d-inline">
-            <label for="select">Qty</label>
-            <select id="select">
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-            </select>
+            <div class="d-inline">
+              <label for="select">Qty</label>
+              <select id="select">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+              </select>
+            </div>
           </div>
         </div>
+
+        <script>
+          $(document).on("click", "#add-button", function (e) {
+            e.preventDefault();
+            $.ajax({
+              type: "POST",
+              url: '{% url "basket_add" %}',
+              data: {
+                product_id: $("#add-button").val(),
+                product_qty: $("#select option:selected").text(),
+                csrfmiddlewaretoken: "{{csrf_token}}",
+                action: "POST",
+              },
+              success: function (json) {
+                console.log(json);
+                document.getElementById("basket-qty").innerHTML = json.qty;
+              },
+              error: function (xhr, errmsg, err) {},
+            });
+          });
+        </script>
       </div>
     </div>
+    <div class="col-lg-2 ml-auto p-2"></div>
   </div>
-
-  <script>
-    $(document).on("click", "#add-button", function (e) {
-      e.preventDefault();
-      $.ajax({
-        type: "POST",
-        url: '{% url "basket_add" %}',
-        data: {
-          product_id: $("#add-button").val(),
-          product_qty: $("#select option:selected").text(),
-          csrfmiddlewaretoken: "{{csrf_token}}",
-          action: "POST",
-        },
-        success: function (json) {
-          console.log(json);
-          document.getElementById("basket-qty").innerHTML = json.qty;
-        },
-        error: function (xhr, errmsg, err) {},
-      });
-    });
-  </script>
-
-  {% endblock content %}
 </div>
+{% endblock content %}

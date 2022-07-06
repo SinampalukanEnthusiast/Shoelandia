@@ -10,7 +10,9 @@
     <meta name="author" content="" />
     <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico" />
 
-    <title>Carousel Template for Bootstrap</title>
+    {% block title %}
+    <title>Shoelandia</title>
+    {% endblock title %}
 
     <link
       rel="canonical"
@@ -39,16 +41,15 @@
               alt="First slide"
             />
             <div class="container">
-              <div class="carousel-caption my-left text-left">
-                <h1 class="text-white display-4">Example headline.</h1>
+              <div class="carousel-caption my-right text-right">
+                <h1 class="text-white display-4">Shoelandia</h1>
+                <p>The vast land of children shoes!</p>
                 <p>
-                  Cras justo odio, dapibus ac facilisis in, egestas eget quam.
-                  Donec id elit non mi porta gravida at eget metus. Nullam id
-                  dolor id nibh ultricies vehicula ut id elit.
-                </p>
-                <p>
-                  <a class="btn btn-lg btn-primary" href="#" role="button"
-                    >Sign up today</a
+                  <a
+                    class="btn btn-lg btn-primary"
+                    href="{% url 'store' %}"
+                    role="button"
+                    >Shop now!</a
                   >
                 </p>
               </div>
@@ -62,7 +63,7 @@
             />
             <div class="container">
               <div class="carousel-caption">
-                <h1 class="text-white display-4">Another example headline.</h1>
+                <h1 class="text-white display-4">Insert Headline here!</h1>
                 <p>
                   Cras justo odio, dapibus ac facilisis in, egestas eget quam.
                   Donec id elit non mi porta gravida at eget metus. Nullam id
@@ -83,8 +84,8 @@
               alt="Third slide"
             />
             <div class="container">
-              <div class="carousel-caption text-right my-right">
-                <h1 class="text-white display-4">One more for good measure.</h1>
+              <div class="carousel-caption text-left my-left">
+                <h1 class="text-white display-4">Promotional Material Here!</h1>
                 <p>
                   Cras justo odio, dapibus ac facilisis in, egestas eget quam.
                   Donec id elit non mi porta gravida at eget metus. Nullam id
@@ -131,8 +132,8 @@
         <div class="row featurette">
           <div class="col-md-7">
             <h2 class="featurette-heading pt-5">
-              First featurette heading.
-              <span class="text-muted">It'll blow your mind.</span>
+              First promotional heading.
+              <span class="text-muted">Insert promotion here.</span>
             </h2>
             <p class="lead">
               Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id
@@ -155,8 +156,8 @@
         <div class="row featurette">
           <div class="col-md-7 order-md-2">
             <h2 class="featurette-heading">
-              Oh yeah, it's that good.
-              <span class="text-muted">See for yourself.</span>
+              Second promotional heading.
+              <span class="text-muted">Insert second promotion here.</span>
             </h2>
             <p class="lead">
               Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id
@@ -179,7 +180,8 @@
         <div class="row featurette">
           <div class="col-md-7">
             <h2 class="featurette-heading">
-              And lastly, this one. <span class="text-muted">Checkmate.</span>
+              Third promotional heading
+              <span class="text-muted">Final heading here.</span>
             </h2>
             <p class="lead">
               Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id

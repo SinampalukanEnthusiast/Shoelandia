@@ -134,3 +134,13 @@ h6 {
 .carousel-control-next {
   max-width: 5rem;
 }
+.img-link-overlay {
+  font-size: 0px;
+  display: block;
+  position: absolute;
+  inset: 0px;
+  z-index: 1;
+}
+.my-font {
+  font-family: "Lilita One", cursive;
+}

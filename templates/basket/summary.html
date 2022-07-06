@@ -8,8 +8,10 @@
       <div class="row">
         <div class="col-md-6">
           <h1 class="font-weight-light">Order</h4>
-
+            <br>
+           
           {% for item in basket %} {% with product=item.product %}
+          
           <div class="d-inline-flex row">
             <img
               src="{{ product.imageURL }}"
@@ -57,7 +59,6 @@
               </div>
             </div>
           </div>
-
           {% endwith %} {% endfor %}
         </div>
 
@@ -69,8 +70,9 @@
                           Sub Total:
                </h4>
             </div>
+            <h4 class="font-weight-bold">&#x20b1;</h4>
             <div class="col"><h4 class="col font-weight-bold" id="subtotal">
-                          &#x20b1; {{ basket.get_total_price }} </h4></div>
+                           {{ basket.get_subtotal }} </h4></div>
           </div>
           <div class="row">
             <div class="col">
@@ -78,8 +80,10 @@
                   Shipping Fee:
                  </h4>
             </div>
-            <div class="col"><h4 class="col font-weight-bold" id="subtotal">
-                          &#x20b1; 50 </h4></div>
+            <h4 class="font-weight-bold">&#x20b1;</h4>
+
+            <div class="col"><h4 class="col font-weight-bold" id="shippingfee">
+                          0 </h4></div>
           </div>
           <hr class="featurette-divider">
 
@@ -89,8 +93,10 @@
                 Total:
                </h4>
             </div>
-            <div class="col"><h4 class="col font-weight-bold" id="subtotal">
-                &#x20b1; {{basket.get_total_price}} + 50 </h4></div>
+            <h4 class="font-weight-bold">&#x20b1;</h4>
+
+            <div class="col"><h4 class="col font-weight-bold" id="total">
+                {{basket.get_subtotal}}</h4></div>
           </div>
           <div class="row pt-5">
            <a href="{% url 'deliverychoices' %}" class="btn btn-success btn-block">Checkout</a> 
@@ -107,7 +113,6 @@
 <script>
   // Delete Item
   $(document).on("click", ".delete-button", function (e) {
-    e.preventDefault();
     var prodid = $(this).data("index");
     $.ajax({
       type: "POST",
@@ -121,6 +126,7 @@
         console.log(json);
         $('.product-item[data-index="' + prodid + '"]').remove();
         document.getElementById("subtotal").innerHTML = json.subtotal;
+        document.getElementById("total").innerHTML = json.subtotal;
         document.getElementById("basket-qty").innerHTML = json.qty;
       },
       error: function (xhr, errmsg, err) {},
@@ -144,6 +150,9 @@
         document.getElementById("basket-qty").innerHTML = json.qty;
         console.log(json.qty);
         document.getElementById("subtotal").innerHTML = json.subtotal;
+          document.getElementById("total").innerHTML = json.subtotal;
+        console.log(json.subtotal);
+
       },
       error: function (xhr, errmsg, err) {},
     });

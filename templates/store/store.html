@@ -1,42 +1,51 @@
-{% extends 'store/main.html' %} {% load static %} {% block content%}
+{% extends 'store/main.html' %} {% load static %} {% block content %}
+
+<!-- this is a comment -->
+{% block title %}
+<title>Store</title>
+{% endblock title %}
+
 <div class="container-fluid d-flex justify-content-center">
-  <div class="row">
-    {% for product in products %}
+  <div class="col d-flex">
+    <div class="col-lg-2">
+      <h4>Filter</h4>
+      <hr />
+    </div>
+    <div class="row">
+      {% for product in products %}
 
-    <div class="ml-1 px-2 py-2">
-      <div class="card" style="width: 18rem">
-        <img
-          class="card-img-top"
-          src="{{ product.imageURL }}"
-          alt="Card image cap"
-          width="286px"
-          height="180px"
-        />
-        <div class="card-body">
-          <h5 class="card-title">
-            <strong>{{product.brand_name}} {{product.product_name}}</strong>
-            <hr />
-            <strong>${{product.price|floatformat:2}}</strong>
-          </h5>
-          <p class="card-text">{{product.description}}</p>
-          <button
-            type="button"
-            id="add-button"
-            value="{{product.id}}"
-            class="btn btn-secondary"
-          >
-            Add to cart
-          </button>
-
-          <a
-            class="btn btn-outline-success"
-            href="{% url 'product_detail' product.slug %}"
-            >View</a
-          >
+      <div class="col">
+        <div class="container-fluid p-1">
+          <img
+            src="{{product.imageURL}}"
+            class="rounded mx-auto d-block border"
+            style="
+              max-width: 20rem;
+              height: 20rem;
+              min-height: fit-content;
+              min-width: 100%;
+            "
+            alt="..."
+          />
+          <div class="card-img-overlay">
+            <a
+              href="{% url 'product_detail' product.slug %}"
+              class="img-link-overlay"
+            ></a>
+          </div>
+          <div class="card-body border container-fluid p-3">
+            <h5 class="card-title">
+              {{product.brand_name}} {{product.product_name}}
+              <hr />
+              &#x20b1;{{product.price|floatformat:2}}
+            </h5>
+          </div>
         </div>
       </div>
+
+      {% endfor %}
     </div>
-    {% endfor %}
+    <div class="col-lg-2 ml-auto p-2"></div>
   </div>
 </div>
 

@@ -26,39 +26,11 @@
     <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
         <li class="nav-item active">
-          <a class="nav-link" href="{% url 'store' %}"
+          <a class="nav-link text-muted" href="{% url 'store' %}"
             >Store <span class="sr-only">(current)</span></a
           >
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item">
-          <div class="btn-group dropright">
-            <button
-              type="button"
-              class="btn dropdown-toggle"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              FAQs
-            </button>
-            <div class="dropdown-menu">
-              <button class="dropdown-item" type="button">
-                <a class="nav-link p-0" href="{% url 'home' %}">About </a>
-              </button>
-              <button class="dropdown-item" type="button">
-                <a class="nav-link p-0" href="{% url 'home' %}">Pricing </a>
-              </button>
-              <button class="dropdown-item" type="button">
-                <a class="nav-link p-0" href="{% url 'home' %}"
-                  >Shipping locations
-                </a>
-              </button>
-            </div>
-          </div>
-        </li>
+        <li class="nav-item"></li>
       </ul>
       <form class="form-inline my-2 my-lg-0 mr-2">
         <input
@@ -72,85 +44,11 @@
         </button>
       </form>
       <div class="form-inline my-2 my-lg-0">
-        {% if request.user.is_authenticated %}
-        <a
-          type="button"
-          role="button"
-          href="{% url 'dashboard' %}"
-          class="btn btn-outline-primary border-0 basket-btn"
-        >
-          <div>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              class="bi bi-person-circle"
-              viewBox="0 0 16 16"
-            >
-              <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-              <path
-                fill-rule="evenodd"
-                d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
-              />
-            </svg>
-          </div>
-          <span class="fs15 fw500">Account</span>
-        </a>
-        <a
-          type="button"
-          role="button"
-          href="{% url  'logout' %}"
-          class="btn btn-outline-primary border-0 basket-btn"
-        >
-          <div>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="22"
-              height="22"
-              fill="currentColor"
-              class="bi bi-door-closed"
-              viewBox="0 0 16 16"
-            >
-              <path
-                d="M3 2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v13h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V2zm1 13h8V2H4v13z"
-              />
-              <path d="M9 9a1 1 0 1 0 2 0 1 1 0 0 0-2 0z" />
-            </svg>
-          </div>
-          <span class="fs15 fw500">Logout</span>
-        </a>
-        {% else %}
-        <a
-          type="button"
-          role="button"
-          href="{% url  'login' %}"
-          class="btn btn-outline-primary border-0 basket-btn"
-        >
-          <div>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="22"
-              height="22"
-              fill="currentColor"
-              class="bi bi-door-closed"
-              viewBox="0 0 16 16"
-            >
-              <path
-                d="M3 2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v13h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V2zm1 13h8V2H4v13z"
-              />
-              <path d="M9 9a1 1 0 1 0 2 0 1 1 0 0 0-2 0z" />
-            </svg>
-          </div>
-          <span class="fs15 fw500">Login</span>
-        </a>
-
-        {% endif %}
         <a
           type="button"
           role="button"
           href="{% url 'basket_summary' %}"
-          class="btn btn-outline-primary border-0 basket-btn"
+          class="btn btn-outline-primary border-0 text-muted basket-btn"
         >
           <div class="d-flex-inline">
             {% with total_qty=basket|length %}
@@ -174,6 +72,90 @@
           </div>
           <span class="fs15 fw500">Basket</span>
         </a>
+        {% if request.user.is_authenticated %}
+        <div class="btn-group dropdown ">
+          <button
+            type="button"
+            class="btn dropdown-toggle text-muted"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-person-circle d-flex-inline"
+              viewBox="0 0 16 16"
+            >
+              <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+              <path
+                fill-rule="evenodd"
+                d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
+              />
+            </svg>
+            <span class="fs15 fw500"> Account</span>
+          </button>
+          <div class="container-fluid">
+
+            <div class="dropdown-menu ">
+
+                  <button class="dropdown-item " type="button">
+                  <a class="nav-link p-0 text-muted " href="{% url 'dashboard' %}">Dashboard </a>
+                </button>
+                <button class="dropdown-item" type="button">
+                  <a class="container-fluid text-muted nav-link p-0 btn btn-outline-primary border-0 basket-btn" href="{% url 'logout' %}">Logout 
+                    <div class="">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="22"
+                        height="22"
+                        fill="currentColor"
+                        class="bi bi-door-closed "
+                        viewBox="0 0 16 16">
+                        <path
+                          d="M3 2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v13h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V2zm1 13h8V2H4v13z"
+                        />
+                        <path d="M9 9a1 1 0 1 0 2 0 1 1 0 0 0-2 0z" />
+                      </svg>
+                    </div>
+                  </a>
+                </button>
+                       
+          </div>
+          </div>
+          
+        </div>
+          
+        </a>
+        {% else %}
+        <a
+          type="button"
+          role="button"
+          href="{% url  'login' %}"
+          class="btn btn-outline-primary text-muted border-0 basket-btn"
+        >
+          <div>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="22"
+              height="22"
+              fill="currentColor"
+              class="bi bi-door-closed"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M3 2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v13h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V2zm1 13h8V2H4v13z"
+              />
+              <path d="M9 9a1 1 0 1 0 2 0 1 1 0 0 0-2 0z" />
+            </svg>
+          </div>
+          <span class="fs15 fw500">Login</span>
+        </a>
+
+        {% endif %}
+        
       </div>
     </div>
   </nav>

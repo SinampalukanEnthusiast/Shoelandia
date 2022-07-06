@@ -1,1 +1,11 @@
-payment suceesfsull
+{% extends "store/main.html" %} {% load static %} {% block content %}
+<main>
+  <div class="container">
+    <h4 class="display-3">
+      Payment is successful!
+      <hr />
+    </h4>
+    <a href="{% url 'dashboard' %}" class="display-4">Go back to dashboard</a>
+  </div>
+</main>
+{% endblock content %}

@@ -1,5 +1,6 @@
-{% extends "../../store/main.html" %} {% load static %} {% block title %}Basket
-Summary{%endblock %} {% block content %}
+{% extends "../../store/main.html" %} {% load static %} {% block title %}
+<!-- this is a comment -->
+{% endblock %} {% block content %}
 
 <main class="pt-5">
   <div class="container" style="max-width: 1000px">
@@ -8,11 +9,35 @@ Summary{%endblock %} {% block content %}
     </div>
     <div class="col-12 d-flex justify-content-between">
       <div>Manage your <b>orders</b> and personal details</div>
-      <div><a href="{% url 'dashboard_edit' %}">Change Details</a></div>
     </div>
     <hr />
   </div>
   <div class="container" style="max-width: 1000px">
+    <div class="row g-3">
+      <div class="col">
+        <div class="card">
+          <h5 class="card-header">Orders</h5>
+          <div class="card-body">
+            <h5 class="card-title">View and manage your orders</h5>
+            <a href="#" class="btn btn-primary">Manage</a>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card">
+          <h5 class="card-header">Profile</h5>
+          <div class="card-body">
+            <h5 class="card-title">View and edit your profile details</h5>
+            <a href="{% url 'dashboard_edit' %}" class="btn btn-primary"
+              >Edit profile</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="container" style="max-width: 1000px">
     {% for order in orders %}
     <div class="row g-3">
       <div class="col-12 bg-light p-3 d-flex justify-content-between">
@@ -93,7 +118,7 @@ Summary{%endblock %} {% block content %}
       </div>
     </div>
     {% endfor %}
-  </div>
+  </div> -->
 </main>
 
 {% endblock %}

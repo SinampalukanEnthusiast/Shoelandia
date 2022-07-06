@@ -18,9 +18,9 @@ formamtting comment becasue prettier is fucking up my loading tagasdasasdasasdss
       <div class="row no-gutter">
         <div class="col-md-12">
           <div class="login d-flex align-items-center py-5">
-            <div class="container">
+            <div class="row container">
               <div class="row">
-                <div class="col-12 col-lg-7 mx-auto">
+                <div class="col container-fluid">
                   <form
                     class="bootstrap4 account-form p-4 rounded col-lg-10 mx-auto"
                     method="POST"
@@ -41,7 +41,8 @@ formamtting comment becasue prettier is fucking up my loading tagasdasasdasasdss
                     </div>
                     {% endif %} {% csrf_token %} {% crispy form %}
                   </form>
-
+                </div>
+                <div class="col container-fluid">
                   <form
                     class="account-form px-4"
                     action="{% url 'delete_user' %}"

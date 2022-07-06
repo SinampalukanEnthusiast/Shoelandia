@@ -1,5 +1,5 @@
 {% extends "store/main.html" %} {% load static %} {% load crispy_forms_tags %}
-{% block title %} Delivery Options{% endblock %} {% block content %}
+{% block content %}
 
 <div class="container">
   <div class="col-12">
@@ -26,7 +26,9 @@
     {% else %}
     <div class="col-md-4 col-lg-4 order-md-last p-0 order-3">
       <div class="d-flex bd-highlight ms-0">
-        <div class="p-2 flex-grow-1 bd-highlight">Sub Total:</div>
+        <div class="p-2 flex-grow-1 bd-highlight">
+          <h5>Sub Total:</h5>
+        </div>
         <div class="p-2 bd-highlight">
           <span class="fw-bold h5">&#x20b1;</span
           ><span id="sub_total" class="fw-bold h5"
@@ -35,7 +37,9 @@
         </div>
       </div>
       <div class="d-flex bd-highlight">
-        <div class="p-2 flex-grow-1 bd-highlight">Delivery Cost:</div>
+        <div class="p-2 flex-grow-1 bd-highlight">
+          <h5>Shipping Fee:</h5>
+        </div>
         <div class="p-2 bd-highlight">
           <span class="fw-bold h5">&#x20b1;</span
           ><span id="delivery_price" class="fw-bold h5"
@@ -43,8 +47,10 @@
           >
         </div>
       </div>
+      <hr />
+
       <div class="d-flex bd-highlight">
-        <div class="p-2 flex-grow-1 bd-highlight">Total:</div>
+        <div class="p-2 flex-grow-1 bd-highlight"><h5>Total:</h5></div>
         <div class="p-2 bd-highlight">
           <span class="fw-bold h5">&#x20b1;</span
           ><span id="total" class="fw-bold h5">{{basket.get_total_price}}</span>
@@ -52,10 +58,10 @@
       </div>
       <a
         role="button"
-        href="{% url 'delivery_address' %}"
+        href="{% url 'payment_selection' %}"
         class="btn btn-success fw-bold w-100"
         type="button"
-        >Pay Securely</a
+        >Proceed to payment</a
       >
     </div>
     <div class="col-md-7 col-lg-8">

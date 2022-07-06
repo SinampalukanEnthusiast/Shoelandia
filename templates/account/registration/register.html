@@ -15,9 +15,10 @@
                 class="account-form p-4 rounded col-lg-10 mx-auto"
               >
                 {% csrf_token %}
-                <h3 class="mb-2 font-weight-bold">Create account</h3>
-                <p class="mb-4">Free of charge</p>
-
+                <h3 class="mb-2 font-weight-light text-center">
+                  Create account
+                </h3>
+                <hr />
                 {% if form.errors %}
 
                 <p>Please correct the following:</p>
