@@ -12,11 +12,6 @@
 </div>
 
 <div class="container">
-  {% if messages %}
-  <div class="alert alert-warning" alert-{{ message.tags }} role="alert">
-    {% for message in messages %} {{message|safe}} {% endfor %}
-  </div>
-  {% endif %}
   <div class="row g-3">
     {% if deliveryoptions|length == 0 %}
     <div class="col-12">

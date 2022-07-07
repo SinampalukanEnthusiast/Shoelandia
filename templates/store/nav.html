@@ -73,7 +73,7 @@
           <span class="fs15 fw500">Basket</span>
         </a>
         {% if request.user.is_authenticated %}
-        <div class="btn-group dropdown ">
+        <div class="btn-group dropdown d-flex">
           <button
             type="button"
             class="btn dropdown-toggle text-muted"
@@ -99,14 +99,14 @@
           </button>
           <div class="container-fluid">
 
-            <div class="dropdown-menu ">
+            <div class="dropdown-menu">
 
-                  <button class="dropdown-item " type="button">
+                  <button class="dropdown-item" type="button">
                   <a class="nav-link p-0 text-muted " href="{% url 'dashboard' %}">Dashboard </a>
                 </button>
                 <button class="dropdown-item" type="button">
-                  <a class="container-fluid text-muted nav-link p-0 btn btn-outline-primary border-0 basket-btn" href="{% url 'logout' %}">Logout 
-                    <div class="">
+                  <a class="d-flex text-muted nav-link p-0 btn basket-btn" href="{% url 'logout' %}">Logout 
+                    <div class="pl-3">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="22"

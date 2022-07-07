@@ -1,10 +1,11 @@
 
+import re
 from paypalcheckoutsdk.orders import OrdersGetRequest
 from .paypal import PayPalClient
 from datetime import datetime
 import json
-import re
 from urllib import response
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 
 # from account.models import Address
 from basket.basket import Basket
@@ -21,6 +22,13 @@ from decimal import Decimal
 
 @login_required
 def deliverychoices(request):
+    basket = request.session['basket']
+    if basket:
+        pass
+    else:
+        messages.success(request, "Please add items in your basket first.")
+        return redirect('basket_summary')
+
     deliveryoptions = DeliveryOptions.objects.filter(is_active=True)
     context = {"form": AddressCheckoutForm(),
                "deliveryoptions": deliveryoptions}
@@ -74,8 +82,11 @@ def delivery_address(request):
 
 @login_required
 def payment_selection(request):
-
-    return render(request, 'checkout/payment_selection.html', {})
+    if "purchase" not in request.session:
+        messages.success(request, "Please select a delivery option")
+        return redirect("deliverychoices")
+    else:
+        return render(request, 'checkout/payment_selection.html', {})
 
 
 @login_required
@@ -95,7 +106,7 @@ def payment_complete(request):
         full_name=response.result.purchase_units[0].shipping.name.full_name,
         email=response.result.payer.email_address,
         address1=response.result.purchase_units[0].shipping.address.address_line_1,
-        address2=response.result.purchase_units[0].shipping.address.admin_area_2,
+        address2=response.result.purchase_units[0].shipping.address.address_line_2,
         postal_code=response.result.purchase_units[0].shipping.address.postal_code,
         country_code=response.result.purchase_units[0].shipping.address.country_code,
         total_paid=total_paid,

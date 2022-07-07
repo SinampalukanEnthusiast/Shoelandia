@@ -5,45 +5,42 @@
 <title>Store</title>
 {% endblock title %}
 
-<div class="container-fluid d-flex justify-content-center">
+<div class="container-fluid">
   <div class="col d-flex">
     <div class="col-lg-2">
       <h4>Filter</h4>
       <hr />
     </div>
-    <div class="row">
-      {% for product in products %}
+    <div class="col">
+      <div class="row no-gutters container-fluid">
+        {% for product in products %}
 
-      <div class="col">
-        <div class="container-fluid p-1">
-          <img
-            src="{{product.imageURL}}"
-            class="rounded mx-auto d-block border"
-            style="
-              max-width: 20rem;
-              height: 20rem;
-              min-height: fit-content;
-              min-width: 100%;
-            "
-            alt="..."
-          />
-          <div class="card-img-overlay">
-            <a
-              href="{% url 'product_detail' product.slug %}"
-              class="img-link-overlay"
-            ></a>
-          </div>
-          <div class="card-body border container-fluid p-3">
-            <h5 class="card-title">
-              {{product.brand_name}} {{product.product_name}}
-              <hr />
-              &#x20b1;{{product.price|floatformat:2}}
-            </h5>
+        <div class="col p-0">
+          <div class="container-fluid p-0">
+            <img
+              src="{{product.imageURL}}"
+              class="border"
+              style="max-width: 20rem; min-height: 20rem; width: auto"
+              alt="..."
+            />
+            <div class="card-img-overlay">
+              <a
+                href="{% url 'product_detail' product.slug %}"
+                class="img-link-overlay"
+              ></a>
+            </div>
+            <div class="card-body p-0">
+              <h5 class="card-title font-weight-light">
+                {{product.brand_name}} {{product.product_name}}
+                <br />
+                &#x20b1;{{product.price|floatformat:2}}
+              </h5>
+            </div>
           </div>
         </div>
-      </div>
 
-      {% endfor %}
+        {% endfor %}
+      </div>
     </div>
     <div class="col-lg-2 ml-auto p-2"></div>
   </div>

@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
+from requests import Session
 from .basket import Basket
 from store.models import Product
 
@@ -13,7 +14,6 @@ def basket_summary(request):
 
 def basket_add(request):
     basket = Basket(request)
-
     if request.POST.get('action') == 'POST':
 
         product_id = int(request.POST.get('product_id'))
