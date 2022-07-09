@@ -49,7 +49,9 @@ class UserBase(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
-
+    # is_delivery
+    # association
+    # phone
     objects = CustomAccountManager()
 
     USERNAME_FIELD = 'email'

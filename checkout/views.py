@@ -1,10 +1,8 @@
 
-import re
 from paypalcheckoutsdk.orders import OrdersGetRequest
 from .paypal import PayPalClient
 from datetime import datetime
 import json
-from urllib import response
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 
 # from account.models import Address
@@ -29,7 +27,8 @@ def deliverychoices(request):
         messages.success(request, "Please add items in your basket first.")
         return redirect('basket_summary')
 
-    deliveryoptions = DeliveryOptions.objects.filter(is_active=True)
+    deliveryoptions = DeliveryOptions.objects.all()
+    print(deliveryoptions)
     context = {"form": AddressCheckoutForm(),
                "deliveryoptions": deliveryoptions}
 
@@ -91,24 +90,36 @@ def payment_selection(request):
 
 @login_required
 def payment_complete(request):
+    basket = Basket(request)
     PPClient = PayPalClient()
-
+    address2 = ""
+    city = ""
+    phone = ""
     body = json.loads(request.body)
     data = body["orderID"]
     user_id = request.user.id
     requestorder = OrdersGetRequest(data)
     response = PPClient.client.execute(requestorder)
+    try:
+        address2 = response.result.purchase_units[0].shipping.address.address_line_2
+    except:
+        address2 = ""
+    try:
+        city = response.result.purchase_units[0].shipping.address.admin_area_2
+    except:
+        city = ""
     total_paid = response.result.purchase_units[0].amount.value
     total_paid = round(Decimal(total_paid), 2)
-    basket = Basket(request)
     order = Order.objects.create(
         user_id=user_id,
         full_name=response.result.purchase_units[0].shipping.name.full_name,
         email=response.result.payer.email_address,
         address1=response.result.purchase_units[0].shipping.address.address_line_1,
-        address2=response.result.purchase_units[0].shipping.address.address_line_2,
+        address2=address2,
+        city=city,
         postal_code=response.result.purchase_units[0].shipping.address.postal_code,
         country_code=response.result.purchase_units[0].shipping.address.country_code,
+        phone=phone,
         total_paid=total_paid,
         order_key=response.result.id,
         payment_option="paypal",

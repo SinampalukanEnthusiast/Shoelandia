@@ -14,19 +14,23 @@
             {% for item in basket %} {% with product=item.product %}
             
             <div class="d-inline-flex row">
-              <img
-                src="{{ product.imageURL }}"
+              {% for image in product.product_image.all  %}
+                {% if image.is_feature %}
+                  <img
+                src="{{ image.image.url }}"
                 alt="productholder"
                 class="img-thumbnail rounded"
                 style="max-width: 10rem; min-height: 10rem; width: auto"
               />
+                {% endif %}
+              {% endfor %}
 
               <div class="col">
                 <h4 class="text-left font-weight-light">
-                  {{product.get_full_name}}
+                  {{product.title}}
                 </h4>
                 <h5 class="text-left font-weight-light">
-                  &#x20b1; {{product.price}}
+                  &#x20b1; {{product.regular_price}}
                 </h5>
 
 
