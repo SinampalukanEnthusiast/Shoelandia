@@ -107,13 +107,17 @@ class Product(models.Model):
     def __str__(self):
         return self.title
 
+    def get_subproducts(self):
+        subproducts = self.subproduct_set.all()
+        return subproducts
+
     @property
     def get_full_name(self):
         return f'{self.title}'
 
 
 class SubProduct(models.Model):
-
+    # change flagship to default,
     sub_name = models.CharField(verbose_name="Subproduct Name",
                                 help_text="Required. Sub-product Name", max_length=255)
     product = models.ForeignKey(Product, on_delete=models.RESTRICT, null=True)
@@ -136,6 +140,22 @@ class SubProduct(models.Model):
     def __str__(self):
         return self.sub_name
 
+    def get_sizes(self):
+        sizes_queryset = self.productsizes_set.all()
+        return sizes_queryset
+
+    def get_colors(self):
+        pass
+
+    def get_images(self):
+        images_queryset = self.product_image.all()
+        return images_queryset
+
+    def get_featured(self, images):
+        for image in images:
+            if image.is_feature:
+                return image
+
 
 class ProductSizes(models.Model):
     sub_product = models.ForeignKey(SubProduct, on_delete=models.RESTRICT)
@@ -154,15 +174,17 @@ class ProductSizes(models.Model):
         verbose_name = "Product size "
         verbose_name_plural = "Product sizes"
 
-    # @property
-    # def total_size_stock(self):
-    #     return self.sub_product.stock_amount
+    @property
+    def total_stock(self):
+        return sum(self.stock_amount)
 
     def __str__(self):
-        return f"{self.size} from {self.sub_product.sub_name}"
+        return f"{self.size}"
 
 
 class ProductColor(models.Model):
+    # remove stock
+    # make color required
     COLOR_CHOICES = [('RD', 'Red'),
                      ('BK', 'Black'),
                      ('BL', 'Blue'),
@@ -186,7 +208,8 @@ class ProductImage(models.Model):
     """
     The Subproduct Image table.
     """
-
+    # make image required
+    # make is feature required
     sub_product = models.ForeignKey(
         SubProduct, on_delete=models.CASCADE, related_name="product_image")
     image = models.ImageField(

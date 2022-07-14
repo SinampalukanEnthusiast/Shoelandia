@@ -6,7 +6,8 @@
     <div class="row">
       <div class="col">
         <div class="container-fluid pb-5">
-          {% for image in product.product_image.all %} {% if image.is_feature %}
+          <!-- inthihs -->
+
           <img
             class="rounded"
             data-src="holder.js/100px260/"
@@ -15,9 +16,7 @@
             src="{{image.image.url}}"
             data-holder-rendered="true"
           />
-          {% endif %}
         </div>
-        {% endfor %}
       </div>
       <div class="col">
         <div class="">
@@ -30,6 +29,58 @@
         </div>
         <hr />
         <div>
+          <h5 class="font-weight-light">Variants available</h5>
+          <div
+            class="btn-group btn-group-toggle"
+            data-toggle="buttons"
+            id="mybuttons"
+          >
+            {% for color in colors %}
+            <!-- this is a comment-->
+            <!-- {{variant}} {{color.productcolor__color}} -->
+            <label
+              class="btn btn-outline-primary"
+              id="target-{{color.sub_name}}"
+              data-attribute="color"
+              value="{{color.productcolor__color}}"
+              {% if variant == color.productcolor__color %}
+              active
+              {% endif %}
+            >
+              <input type="radio" name="color variants" {% if variant == color.productcolor__color %}
+              checked
+              {% endif %} />
+
+              {{color.sub_name}}
+            </label>
+            {% endfor %}
+          </div>
+
+          <br />
+          <br />
+          <h5 class="font-weight-light">Sizes available</h5>
+          <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            {% if sizes %} {% for size in sizes %}
+            <label
+              class="btn btn-outline-secondary"
+              id="size-target"
+              value="{{size.size}}"
+            >
+              <input
+                type="radio"
+                name="options"
+                id="size-target"
+                value="{{size.size}}"
+                autocomplete="off"
+              />
+              {{size.size}}
+            </label>
+
+            <br />
+            {% endfor %} {% else %} No sizes available {% endif %}
+          </div>
+          <hr />
+
           <div class="d-inline-flex pb-3">
             <button
               type="button"
@@ -49,8 +100,51 @@
               </select>
             </div>
           </div>
+          <hr />
         </div>
+
         <script>
+          var d = {};
+          let textBoxes = document.querySelectorAll("[id^=target]");
+          let e = 0;
+          let f = textBoxes.length;
+          let picked = "";
+          for (let i in textBoxes) {
+            if (e < f) {
+              if (textBoxes[i].classList.contains("selected"))
+                d[textBoxes[i].getAttribute("data-attribute")] =
+                  textBoxes[i].getAttribute("value");
+            } else {
+              break;
+            }
+            e++;
+            console.log(d);
+          }
+          let querystring = "";
+          document.getElementById("mybuttons").addEventListener(
+            "click",
+            function (e) {
+              let value = e.target.getAttribute("value");
+              d[e.target.getAttribute("data-attribute")] =
+                e.target.getAttribute("value");
+              picked = value;
+
+              querystring = buildUrlWithParams(d);
+              let url = window.location.href.split("?")[0];
+              window.location.href = url + "?" + querystring;
+            },
+            false
+          );
+
+          function buildUrlWithParams(data) {
+            var searchparams = [];
+            for (var d in data) {
+              searchparams.push(d + "=" + data[d]);
+              console.log(d);
+              return searchparams.join("&");
+            }
+          }
+          console.log(d);
           $(document).on("click", "#add-button", function (e) {
             e.preventDefault();
             $.ajax({
@@ -59,6 +153,9 @@
               data: {
                 product_id: $("#add-button").val(),
                 product_qty: $("#select option:selected").text(),
+                size: document.querySelector('input[name="options"]:checked')
+                  .value,
+                variant: "{{variant}}",
                 csrfmiddlewaretoken: "{{csrf_token}}",
                 action: "POST",
               },
@@ -84,7 +181,7 @@
       data-src="holder.js/100px260/"
       alt="100%x260"
       style="max-width: 20rem; min-height: 20rem; width: auto"
-      src="{{product.imageURL}}"
+      src="{{image.image.url}}"
       data-holder-rendered="true"
     />
     <img
@@ -92,7 +189,7 @@
       data-src="holder.js/100px260/"
       alt="100%x260"
       style="max-width: 20rem; min-height: 20rem; width: auto"
-      src="{{product.imageURL}}"
+      src="{{image.image.url}}"
       data-holder-rendered="true"
     />
   </div>

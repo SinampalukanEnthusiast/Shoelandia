@@ -35,6 +35,11 @@ def dashboard_edit(request):
                   'account/user/dashboard_edit.html', {'form': user_form})
 
 
+def orders(request):
+
+    return render(request, 'account/user/orders.html')
+
+
 @login_required
 def delete_user(request):
     user = UserBase.objects.get(user_name=request.user)

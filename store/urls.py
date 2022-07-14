@@ -6,7 +6,13 @@ from . import views
 urlpatterns = [
     path('', views.home, name="home"),
     path('store/', views.store, name="store"),
-    path('<slug:slug>', views.product_detail, name="product_detail"),
+    path('store/<slug:slug>/', views.product_detail, name="product_detail"),
+    path('category/<slug:category>/',
+         views.category_products, name="category_products"),
+    path('practice/', views.get_practice, name="get_practice"),
+
+
+
     # path('login/', views.loginUser, name="login"),
     # path('logout/', views.logoutUser, name="logout"),
     #path('register/', views.register, name="register"),

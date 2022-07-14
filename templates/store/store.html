@@ -13,9 +13,14 @@
     </div>
     <div class="col">
       <div class="row no-gutters container-fluid">
+        <!-- by issus this code is mad ugly -->
         {% for product in products %}
         <!-- thsi is a comment -->
-        {% for image in product.product_image.all %}
+        {% for sub in product.subproduct_set.all %}
+        <!-- thsi is a comment -->
+        {% if sub.is_default %}
+        <!-- thsi is a comment -->
+        {% for image in sub.product_image.all %}
         <!-- thsi is a comment -->
         {% if image.is_feature %}
 
@@ -23,12 +28,16 @@
           <div class="container-fluid p-0">
             <img
               src="{{image.image.url}}"
-              class="border"
+              class=""
               style="max-width: 20rem; min-height: 20rem; width: auto"
               alt="..."
             />
 
-            {% endif %} {% endfor %}
+            {% endif %}
+            <!-- this is a cometn -->
+            {% endfor %} {% endif %}
+            <!-- this is a cometn -->
+            {% endfor %}
             <div class="card-img-overlay">
               <a
                 href="{% url 'product_detail' product.slug %}"
@@ -37,7 +46,7 @@
             </div>
             <div class="card-body p-0">
               <h5 class="card-title font-weight-light">
-                {{product.brand_name}} {{product.product_name}}
+                {{product.title}}
                 <br />
                 &#x20b1;{{product.regular_price|floatformat:2}}
               </h5>

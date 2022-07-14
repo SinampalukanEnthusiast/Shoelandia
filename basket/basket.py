@@ -2,7 +2,7 @@
 
 from ast import Del
 from decimal import Decimal
-from store.models import Product
+from store.models import Product, ProductImage, SubProduct
 from checkout.models import DeliveryOptions
 from django.conf import settings
 
@@ -20,13 +20,26 @@ class Basket():
             basket = self.session[settings.BASKET_SESSION_ID] = {}
         self.basket = basket
 
-    def add(self, product, qty):
+    def add(self, product, qty, size, variant):
         product_id = str(product.id)
+        product_name = 'Red Air Max'
+
+        images = ProductImage.objects.filter(
+            sub_product__sub_name=product_name).filter(is_feature=True).values('image')
+
+        for image in images:
+            image = image
+        print(f'{image["image"]}')
         if product_id in self.basket:
             self.basket[product_id]['qty'] = qty
+            self.basket[product_id]['size'] = size
+            self.basket[product_id]['variant'] = variant
+            self.basket[product_id]['image'] = image['image']
         else:
             self.basket[product_id] = {'price': str(
-                product.regular_price), 'qty': qty}
+                product.regular_price), 'qty': qty, 'size': size, 'image': image["image"], 'variant': variant}
+        print('print inside .add: ')
+        print(self.basket)
 
         self.save()
 
