@@ -11,13 +11,7 @@ urlpatterns = [
     path('basket/', include('basket.urls')),
     path('', include('account.urls')),
     path('checkout/', include('checkout.urls')),
-
+    path('__debug__/', include('debug_toolbar.urls')),
 ]
 
-# urlpatterns = [
-#     path('admin/', admin.site.urls),
-#     path('', include('store.urls', namespace='store')),
-#     path('basket/', include('basket.urls', namespace='basket')),
-# ]
-# adds in the images folder as a reachable url
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

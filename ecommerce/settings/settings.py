@@ -1,5 +1,5 @@
 from pathlib import Path
-
+from .storage import *
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 SECRET_KEY = 'u2ns=a*93ax9f%$t%irgr_1!u!o+f!4(wv_oz5s#^49$p$@lfa'
@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'account',
     'orders',
     'checkout',
+    'mptt',
     # 'storages', # uncomment when deploying
 
 ]
@@ -66,8 +67,12 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": "postgres",
+        "USER": "postgres",
+        "PASSWORD": "admin",
+        "HOST": "127.0.0.1",
+        "PORT": "5432",
     }
 }
 

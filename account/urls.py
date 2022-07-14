@@ -20,7 +20,8 @@ urlpatterns = [
          views.delete_user, name='delete_user'),
     path('dashboard/delete_user/confirm/',
          TemplateView.as_view(template_name="account/user/delete_confirm.html"), name='delete_confirm'),
-
+    path('dashboard/orders/',
+         views.orders, name='orders'),
 
     #     path('activate/<slug:uidb64>/<slug:token>/',
     #          views.account_activate, name='activate'),

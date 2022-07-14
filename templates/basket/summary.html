@@ -12,10 +12,9 @@
            
           {% if basket %}
             {% for item in basket %} {% with product=item.product %}
-            
             <div class="d-inline-flex row">
-              <img
-                src="{{ product.imageURL }}"
+                <img
+                src="/{{item.image}}"
                 alt="productholder"
                 class="img-thumbnail rounded"
                 style="max-width: 10rem; min-height: 10rem; width: auto"
@@ -23,12 +22,13 @@
 
               <div class="col">
                 <h4 class="text-left font-weight-light">
-                  {{product.get_full_name}}
+                  {{product.title}}, {{item.size}}, variant: {{item.variant}}
+                  
                 </h4>
                 <h5 class="text-left font-weight-light">
-                  &#x20b1; {{product.price}}
-                </h5>
-
+                  &#x20b1; {{product.regular_price}} 
+                </h5> 
+    
 
                 <div class="col-12">
                   <label for="select" class="font-weight-light mr-2 ">Qty</label>
@@ -84,8 +84,8 @@
             </div>
             <h4 class="font-weight-bold">&#x20b1;</h4>
 
-            <div class="col"><h4 class="col font-weight-bold" id="shippingfee">
-                          0 </h4></div>
+            <div class="col"><h5 class="col font-weight-bold " id="shippingfee">
+                          Applied on checkout </h5></div>
           </div>
           <hr class="featurette-divider">
 
