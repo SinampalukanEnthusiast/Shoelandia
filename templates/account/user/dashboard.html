@@ -14,7 +14,7 @@
   </div>
   <div class="container" style="max-width: 1000px">
     <div class="row g-3">
-      <div class="col">
+      <div class="col col-sm">
         <div class="card">
           <h5 class="card-header">Orders</h5>
           <div class="card-body">
@@ -22,8 +22,16 @@
             <a href="{% url 'orders' %}" class="btn btn-primary">Manage</a>
           </div>
         </div>
+
+        <div class="card mt-3">
+          <h5 class="card-header">Addresses</h5>
+          <div class="card-body">
+            <h5 class="card-title">View and manage your addresses</h5>
+            <a href="#" class="btn btn-primary">Manage</a>
+          </div>
+        </div>
       </div>
-      <div class="col">
+      <div class="col col-md-6 col-sm">
         <div class="card">
           <h5 class="card-header">Profile</h5>
           <div class="card-body">

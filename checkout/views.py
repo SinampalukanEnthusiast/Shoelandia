@@ -30,7 +30,7 @@ def deliverychoices(request):
     deliveryoptions = DeliveryOptions.objects.all()
     print(deliveryoptions)
     context = {"form": AddressCheckoutForm(),
-               "deliveryoptions": deliveryoptions}
+               "deliveryoptions": deliveryoptions, 'session': request.session}
 
     return render(request, "checkout/delivery_choices.html", context)
 
@@ -53,8 +53,15 @@ def basket_update_delivery(request):
             session["purchase"]["delivery_id"] = delivery_type.id
             session.modified = True
 
+        if "delivery_selected" not in request.session:
+            session["delivery_selected"] = {
+                'delivery_selected': delivery_option
+            }
+        else:
+            session["delivery_selected"] = delivery_option
+
         response = JsonResponse(
-            {"total": updated_total_price, "delivery_price": delivery_type.delivery_price})
+            {"total": updated_total_price, "delivery_price": delivery_type.delivery_price, })
         return response
 
 

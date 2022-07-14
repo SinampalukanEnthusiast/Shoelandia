@@ -89,17 +89,22 @@
               <p class="card-text ps-2 pb-3">
                 Your order should be delivered within
                 {{option.delivery_timeframe}}
+                
               </p>
             </div>
           </div>
           <div class="col-md-1 ps-md-1">
             <input
-              class="align-middle h-100"
+              class="align-middle h-100 thisbutton"
               type="radio"
               name="deliveryOption"
               id="{{option.id}}"
               value="{{option.id}}"
+              {% if option.id == session.delivery_selected %}
+                checked
+              {% endif %}
             />
+
           </div>
         </div>
       </div>
@@ -108,7 +113,6 @@
     {% endif %}
   </div>
 </div>
-
 <script>
   $("input[type=radio][name=deliveryOption]").on("change", function (e) {
     e.preventDefault();
@@ -121,6 +125,7 @@
         action: "POST",
       },
       success: function (json) {
+        console.log(json)
         document.getElementById("total").innerHTML = json.total;
         document.getElementById("delivery_price").innerHTML =
           json.delivery_price;
