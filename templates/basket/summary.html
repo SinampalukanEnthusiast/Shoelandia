@@ -13,8 +13,10 @@
           {% if basket %}
             {% for item in basket %} {% with product=item.product %}
             <div class="d-inline-flex row">
+
+              <!-- potential sorespot, should be fixed -->
                 <img
-                src="/{{item.image}}"
+                src="/static/images/{{item.image}}"
                 alt="productholder"
                 class="img-thumbnail rounded"
                 style="max-width: 10rem; min-height: 10rem; width: auto"

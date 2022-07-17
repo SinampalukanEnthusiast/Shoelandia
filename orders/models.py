@@ -14,14 +14,19 @@ class Order(models.Model):
     address1 = models.CharField(max_length=250)
     address2 = models.CharField(max_length=250, blank=True)
     city = models.CharField(max_length=100)
-    phone = models.CharField(max_length=100)
+    phone = models.CharField(max_length=100)  # move down
+    # province = models.CharField(max_length=100)
     postal_code = models.CharField(max_length=20)
     country_code = models.CharField(max_length=4, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     total_paid = models.DecimalField(max_digits=9, decimal_places=2)
     order_key = models.CharField(max_length=200)
-    billing_status = models.BooleanField(default=False)
+    billing_status = models.BooleanField(
+        default=False, verbose_name="Payment Status")
+    #is_processing = models.BooleanField(default=False, verbose_name="Processing Status")
+    #is_delivered = models.BooleanField(default=False, verbose_name="Delivery Status")
+    #is_returned = models.BooleanField(default=False, verbose_name="Return Status")
     payment_option = models.CharField(max_length=200, blank=True)
 
     class Meta:
@@ -38,72 +43,10 @@ class OrderItem(models.Model):
     product = models.ForeignKey(Product,
                                 related_name='order_items',
                                 on_delete=models.CASCADE)
+    #variant = models.CharField(max_length=50, blank=True, verbose_name="Product Variant")
+    #size = models.CharField(max_length=50, blank=True, verbose_name="Product Size")
     price = models.DecimalField(max_digits=9, decimal_places=2)
     quantity = models.PositiveIntegerField(default=1)
 
     def __str__(self):
         return str(self.id)
-
-# From previous system in app.store
-# class Customer(models.Model):
-#     user = models.OneToOneField(
-#         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
-#     name = models.CharField(max_length=200, null=True)
-#     email = models.CharField(max_length=200, null=True)
-
-#     def __str__(self):
-#         return self.name
-
-
-# class Order(models.Model):
-#     customer = models.ForeignKey(
-#         Customer, on_delete=models.SET_NULL, null=True, blank=True)
-#     date_ordered = models.DateTimeField(auto_now_add=True)
-#     complete = models.BooleanField(default=False, null=True, blank=True)
-#     transaction_id = models.CharField(max_length=100, null=True)
-
-#     def __str__(self):
-#         return str(self.id)
-
-#     @property
-#     def get_cart_total(self):
-#         orderitems = self.orderitem_set.all()
-#         total = sum([item.get_total for item in orderitems])
-#         return total
-
-#     @property
-#     def get_cart_items(self):
-#         orderitems = self.orderitem_set.all()
-#         total = sum([item.quantity for item in orderitems])
-#         return total
-
-
-# class OrderItem(models.Model):
-#     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
-#     order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
-#     quantity = models.IntegerField(default=0, null=True, blank=True)
-#     date_added = models.DateTimeField(auto_now_add=True)
-
-#     @property
-#     def get_total(self):
-#         total = self.product.price * self.quantity
-#         return total
-
-#     def __str__(self):
-#         myOrderItems = f"{self.product.product_name} {self.product.brand_name}"
-#         return f'{myOrderItems}, {self.quantity}, '
-
-
-# class ShippingAddress(models.Model):
-#     customer = models.ForeignKey(
-#         Customer, on_delete=models.SET_NULL, null=True, blank=True)
-#     order = models.ForeignKey(
-#         Order, on_delete=models.SET_NULL, null=True, blank=True)
-#     address = models.CharField(max_length=200, null=True)
-#     city = models.CharField(max_length=200, null=True)
-#     province = models.CharField(max_length=200, null=True)  # or region
-#     zipcode = models.CharField(max_length=200, null=True)
-#     date_added = models.DateTimeField(auto_now_add=True)
-
-#     def __str__(self):
-#         return self.address

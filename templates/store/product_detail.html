@@ -13,7 +13,7 @@
             data-src="holder.js/100px260/"
             alt="100%x260"
             style="max-width: 40rem; min-height: 40rem; width: auto"
-            src="{{image.image.url}}"
+            src="{% if image is None %}../../static/images/placeholder-500x500.png{% else %}{{image.image.url}}{% endif %}"
             data-holder-rendered="true"
           />
         </div>
@@ -181,7 +181,7 @@
       data-src="holder.js/100px260/"
       alt="100%x260"
       style="max-width: 20rem; min-height: 20rem; width: auto"
-      src="{{image.image.url}}"
+      src="{% if image is None %}../../static/images/placeholder-500x500.png{% else %}{{image.image.url}}{% endif %}"
       data-holder-rendered="true"
     />
     <img
@@ -189,7 +189,7 @@
       data-src="holder.js/100px260/"
       alt="100%x260"
       style="max-width: 20rem; min-height: 20rem; width: auto"
-      src="{{image.image.url}}"
+      src="{% if image is None %}../../static/images/placeholder-500x500.png{% else %}{{image.image.url}}{% endif %}"
       data-holder-rendered="true"
     />
   </div>

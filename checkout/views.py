@@ -1,5 +1,7 @@
 
 from paypalcheckoutsdk.orders import OrdersGetRequest
+
+from account.views import addresses
 from .paypal import PayPalClient
 from datetime import datetime
 import json
@@ -16,6 +18,7 @@ from orders.models import Order, OrderItem
 from .models import DeliveryOptions
 from .forms import AddressCheckoutForm
 from decimal import Decimal
+from account.models import Addresses
 
 
 @login_required
@@ -30,7 +33,7 @@ def deliverychoices(request):
     deliveryoptions = DeliveryOptions.objects.all()
     print(deliveryoptions)
     context = {"form": AddressCheckoutForm(),
-               "deliveryoptions": deliveryoptions}
+               "deliveryoptions": deliveryoptions, 'session': request.session}
 
     return render(request, "checkout/delivery_choices.html", context)
 
@@ -53,8 +56,15 @@ def basket_update_delivery(request):
             session["purchase"]["delivery_id"] = delivery_type.id
             session.modified = True
 
+        if "delivery_selected" not in request.session:
+            session["delivery_selected"] = {
+                'delivery_selected': delivery_option
+            }
+        else:
+            session["delivery_selected"] = delivery_option
+
         response = JsonResponse(
-            {"total": updated_total_price, "delivery_price": delivery_type.delivery_price})
+            {"total": updated_total_price, "delivery_price": delivery_type.delivery_price, })
         return response
 
 
@@ -64,17 +74,18 @@ def delivery_address(request):
     if "purchase" not in request.session:
         messages.success(request, "Please select a delivery option")
         return redirect("deliverychoices")
-    address = {"full_name": "Junnie Beaue",
-               "phone": "12345678910",
-               "postcode": "2031",
-               "address_line": "add 1",
-               "address_line2": "add 2",
-               "town_city": "San Nico mf",
-               "delivery_instructions": "Instructions",
-               "created_at": datetime.now(),
-               "updated_at": datetime.now(),
-               "default": True,
-               }
+
+    address = Addresses.objects.filter(
+        customer=request.user).order_by('-default')
+
+    try:
+        if "address" not in request.session:
+            session["address"] = {'address_id': str(address[0].id)}
+        else:
+            session["address"]["address_id"] = str(address[0].id)
+            session.modified = True
+    except:
+        address = None
 
     return render(request, "checkout/delivery_address.html", {"addresses": address})
 
@@ -108,6 +119,7 @@ def payment_complete(request):
         city = response.result.purchase_units[0].shipping.address.admin_area_2
     except:
         city = ""
+
     total_paid = response.result.purchase_units[0].amount.value
     total_paid = round(Decimal(total_paid), 2)
     order = Order.objects.create(

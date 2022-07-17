@@ -22,14 +22,12 @@ class Basket():
 
     def add(self, product, qty, size, variant):
         product_id = str(product.id)
-        product_name = 'Red Air Max'
-
+        product_name = str(product.title)
+        print(f'product name: {product_name}')
         images = ProductImage.objects.filter(
-            sub_product__sub_name=product_name).filter(is_feature=True).values('image')
-
+            sub_product__product__title=product_name).filter(is_feature=True).values('image')
         for image in images:
             image = image
-        print(f'{image["image"]}')
         if product_id in self.basket:
             self.basket[product_id]['qty'] = qty
             self.basket[product_id]['size'] = size
@@ -115,6 +113,6 @@ class Basket():
     def clear(self):
         # Remove basket from session
         del self.session[settings.BASKET_SESSION_ID]
-        # del self.session["address"]
+        del self.session["address"]
         del self.session["purchase"]
         self.save()

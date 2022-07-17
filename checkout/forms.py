@@ -1,6 +1,6 @@
 from django import forms
 
-from account.models import UserBase
+from account.models import Customer
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 
@@ -18,7 +18,7 @@ class LoginForm(forms.ModelForm):
             Submit('submit', 'Login', css_class='btn btn-primary btn-block py-2 mb-4 mt-5 fw500 w-100'))
 
     class Meta:
-        model = UserBase
+        model = Customer
         fields = ['email', 'password']
 
 
@@ -42,6 +42,6 @@ class AddressCheckoutForm(forms.ModelForm):
             Submit('submit', 'Submit', css_class='btn btn-primary btn-block py-2 mb-4 mt-5 fw500 w-100'))
 
     class Meta:
-        model = UserBase
+        model = Customer
         fields = ['first_name',
                   'address', 'city', 'province', 'zipcode']

@@ -50,7 +50,6 @@ def product_detail(request, slug):
     print(color_get)
     color_selected = None
     product = get_object_or_404(Product, slug=slug)
-    product_sets = product.get_subproducts()
     colors = SubProduct.objects.filter(
         product__slug=slug).values('sub_name', 'productcolor__color',  'is_default')
     if color_get:
@@ -64,8 +63,8 @@ def product_detail(request, slug):
         choices = ProductSizes.SIZE_CHOICES
         for size in choices:
             sizes.append({'size': size[0]})
+
     print(f'sub products in colors: {colors}')
-    featured_image = None
 
     try:
         total_stock = 0
@@ -79,21 +78,22 @@ def product_detail(request, slug):
     else:
         print("no sizes:~~~~~~~~~")
     stock = []
+    featured_image = None
 
-    # refactor to use .filter instead
-    for subproduct in product_sets:
-        if subproduct.is_default:
-            images = subproduct.get_images()
-            featured_image = subproduct.get_featured(images)
-            print(featured_image)
-    ###########
+    try:
+        image = ProductImage.objects.get(
+            sub_product__product__slug=slug, sub_product__is_default=True, is_feature=True)
+    except:
+        image = None
+
+    print(f'imageasdsas: {type(image)}')
 
     if color_get:
-        context = {'product': product, 'image': featured_image,
+        context = {'product': product, 'image': image,
                    'sizes': sizes, 'stock': total_stock, 'colors': colors, 'color_selected': color_selected, 'variant': color_get[0]}
     else:
 
-        context = {'product': product, 'image': featured_image,
+        context = {'product': product, 'image': image,
                    'sizes': sizes, 'stock': total_stock, 'colors': colors, 'color_selected': color_selected, }
     return render(request, 'store/product_detail.html', context)
 

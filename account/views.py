@@ -1,17 +1,21 @@
-from .token import account_activation_token
-from .models import UserBase
-from .forms import RegistrationForm, LoginForm, DashboardEditForm
-# from orders.views import user_orders
+# from .token import account_activation_token
+from email.headerregistry import Address
+from pickle import TRUE
+
+from django.urls import reverse
+from .models import Addresses, Customer
+from .forms import AddressForm, RegistrationForm, LoginForm, DashboardEditForm
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.utils.encoding import force_bytes, force_str
 from django.template.loader import render_to_string
 from django.shortcuts import redirect, render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
+from orders.models import Order
 
 
 @login_required
@@ -37,12 +41,16 @@ def dashboard_edit(request):
 
 def orders(request):
 
-    return render(request, 'account/user/orders.html')
+    customer = request.user.id
+    orders = Order.objects.filter(user_id=customer)
+    print(orders)
+    context = {'orders': orders}
+    return render(request, "account/user/orders.html", context)
 
 
 @login_required
 def delete_user(request):
-    user = UserBase.objects.get(user_name=request.user)
+    user = Customer.objects.get(name=request.user)
     user.is_active = False
     user.save()
     logout(request)
@@ -95,39 +103,68 @@ def account_login(request):
         return render(request, 'account/registration/login.html', context)
 
 
-# def account_activate(request, uidb64, token):
-#     try:
-#         uid = force_str(urlsafe_base64_decode(uidb64))
-#         user = UserBase.objects.get(pk=uid)
-#     except(TypeError, ValueError, OverflowError, user.DoesNotExist):
-#         user = None
-#     if user is not None and account_activation_token.check_token(user, token):
-#         user.is_active = True
-#         user.save()
-#         login(request, user)
-#         return redirect('dashboard')
-#     else:
-#         return render(request, 'account/registration/activate_invalid.html')
+@login_required
+def addresses(request):
+    addresses = Addresses.objects.filter(
+        customer=request.user)
+    print(addresses)
+    context = {'addresses': addresses}
+    return render(request, 'account/user/addresses.html', context)
 
 
-# def register(request):
-#     if request.user.is_authenticated:
-#         return redirect('home')
-#     else:
-#         form = RegisterUser()
-#         if request.method == 'POST':
-#             form = RegisterUser(request.POST)
-#             if form.is_valid():
-#                 form.save()
-#                 customer_username = form.cleaned_data['username']
-#                 customer_name = f"{form.cleaned_data['first_name']} {form.cleaned_data['last_name']}"
-#                 email = form.cleaned_data['email']
-#                 user = User.objects.get(username=customer_username)
-#                 customer = Customer.objects.create(
-#                     name=customer_name, email=email)
-#                 customer.user = user
-#                 customer.save()
-#                 messages.success(request, "Account created!")
-#                 return redirect('login')
-#         context = {'form': form}
-#         return render(request, 'store/register.html', context)
+def add_address(request):
+    if request.method == 'POST':
+        address_form = AddressForm(data=request.POST)
+        if address_form.is_valid():
+            address_form = address_form.save(commit=False)
+            address_form.customer = request.user
+            address_form.save()
+            messages.success(request, 'Address added!')
+            prev_url = request.META.get("HTTP_REFERER")
+            # if "delivery_address" in prev_url:
+            #     return redirect("delivery_address")
+            return HttpResponseRedirect(prev_url)
+    else:
+        address_form = AddressForm()
+        # for item in address_form:
+        #     print(item)
+
+    context = {'form': address_form}
+
+    return render(request, 'account/user/address_edit.html', context)
+
+
+def edit_address(request, id):
+    if request.method == 'POST':
+        address = Addresses.objects.get(pk=id, customer=request.user)
+        address_form = AddressForm(instance=address, data=request.POST)
+
+        if address_form.is_valid():
+            address_form.save()
+            messages.success(request, 'Address edited!')
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    else:
+        address = Addresses.objects.get(pk=id, customer=request.user)
+        address_form = AddressForm(instance=address,)
+
+    context = {'form': address_form}
+
+    return render(request, 'account/user/address_edit.html', context)
+
+
+def delete_address(request, id):
+    address = Addresses.objects.filter(pk=id, customer=request.user).delete()
+    messages.success(request, 'Address deleted successfuly!')
+    return redirect('addresses')
+
+
+def set_default(request, id):
+    address = Addresses.objects.filter(
+        customer=request.user, default=True).update(default=False)
+    address = Addresses.objects.filter(
+        customer=request.user, pk=id).update(default=True)
+    messages.success(request, 'Address set default successfuly!')
+    prev_url = request.META.get("HTTP_REFERER")
+    if "delivery_address" in prev_url:
+        return redirect("delivery_address")
+    return redirect('addresses')

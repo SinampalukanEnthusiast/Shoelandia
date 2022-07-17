@@ -1,0 +1,95 @@
+{% extends "../../store/main.html" %} {% load static %} {% block content %}
+
+<div class="container-fluid">
+  <div class="mx-auto col-lg-8">
+    <div class="container" style="max-width: 1000px">
+      <div class="col-12">
+        <h1 class="display-4">Addresses</h1>
+        <hr />
+      </div>
+      {% if addresses %} {% for address in addresses %}
+
+      <div class="my-3 bg-white rounded box-shadow">
+        <div class="media text-muted pt-1">
+          <div class="media-body pb-3 small lh-125 border-bottom border-gray">
+            <div class="container pl-5">
+              <div class="row">
+                <div class="col-3 mr-5">
+                  <strong class="text-gray-dark">
+                    {{address.full_name}}
+                  </strong>
+                  <br />
+                  <span class="">{{address.address_line}}, </span>
+                  <span class=""
+                    >{{address.address_line2}}, {{address.city}},
+                    {{address.province}}, {{address.zipcode}}
+                  </span>
+                  <span class="">+{{address.phone}} </span>
+                </div>
+                <div class="col-3">
+                  <strong class="text-gray-dark">
+                    Delivery Instructions
+                  </strong>
+                  <span class="align-top"
+                    >{{address.delivery_instructions}}
+                  </span>
+                </div>
+                <div class="col-3">
+                  {% if address.default is True %}
+                  <span
+                    class="bg-success rounded text-white p-1 font-weight-light"
+                    >Default</span
+                  >
+                  {% endif %}
+                </div>
+                <div class="col">
+                  <a href="{% url 'edit_address' address.id %}" class="pb-1"
+                    >Edit</a
+                  ><br />
+                  <a href="{% url 'delete_address' address.id%}" class="pb-1"
+                    >Delete</a
+                  ><br />
+                  <a href="{% url 'set_default' address.id%}" class="pb-1"
+                    >Set Default</a
+                  ><br />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% endfor %} {% else %}
+      <h1 class="h5 font-weight-light mb-3">
+        No addresses yet. Add one to see them here.
+      </h1>
+      {% endif %}
+      <div class="container">
+        <small class="d-block text-left mt-3">
+          <a
+            class="btn btn-success"
+            href="{% url 'add_address' %}"
+            role="button"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-plus-lg"
+              viewBox="0 0 16 16"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"
+              ></path>
+            </svg>
+            Add new address</a
+          >
+        </small>
+      </div>
+    </div>
+
+    {% endblock content %}
+  </div>
+</div>
