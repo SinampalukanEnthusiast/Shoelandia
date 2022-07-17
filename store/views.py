@@ -16,9 +16,18 @@ def home(request):
 
 
 def store(request):
+    query = request.GET.getlist('category')
+    print(f'query: {query}')
 
-    products = Product.objects.all()
-    context = {'products': products}
+    try:
+        products = Product.objects.filter(
+            category__slug=query[0])
+    except:
+        products = Product.objects.all()
+    category_data = Category.objects.filter().values('name', 'slug')
+    for i in category_data:
+        print(i)
+    context = {'products': products, 'category_data': category_data, }
     return render(request, 'store/store.html', context)
 
 
