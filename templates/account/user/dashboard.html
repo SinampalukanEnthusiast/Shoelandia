@@ -5,7 +5,7 @@
 <main class="pt-5">
   <div class="container" style="max-width: 1000px">
     <div class="col-12">
-      <h1 class="h2">Hello, {{request.user}}!</h1>
+      <h1 class="display-4">Hello, {{request.user}}!</h1>
     </div>
     <div class="col-12 d-flex justify-content-between">
       <div>Manage your <b>orders</b> and personal details</div>
@@ -27,7 +27,7 @@
           <h5 class="card-header">Addresses</h5>
           <div class="card-body">
             <h5 class="card-title">View and manage your addresses</h5>
-            <a href="#" class="btn btn-primary">Manage</a>
+            <a href="{% url 'addresses' %}" class="btn btn-primary">Manage</a>
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import *
 from django import forms
-from mptt.admin import MPTTModelAdmin
+from django.contrib import admin
 
 
 class ProductColorInline(admin.TabularInline):
@@ -16,16 +16,24 @@ class ProductSizesInline(admin.TabularInline):
 
 class ProductImageInline(admin.TabularInline):
     model = ProductImage
-    extra = 0
+    extra = 1
 
 
 class SubProductAdmin(admin.ModelAdmin):
     inlines = [ProductSizesInline, ProductColorInline, ProductImageInline]
 
 
+class CategoryAdmin(admin.ModelAdmin):
+    prepopulated_fields = {"slug": ("name",)}
+
+
+class AccountAdmin(admin.ModelAdmin):
+    list_filter = ('user_name', 'email')
+
+
 class SubProductInline(admin.TabularInline):
     model = SubProduct
-    extra = 0
+    extra = 1
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -33,26 +41,6 @@ class ProductAdmin(admin.ModelAdmin):
     inlines = [SubProductInline, ]
 
 
-class CategoryAttributeInline(admin.TabularInline):
-    model = CategoryAttributes
-    extra = 0
-
-
-class CategoryAdmin(admin.ModelAdmin):
-    prepopulated_fields = {"slug": ("name",)}
-
-
 admin.site.register(Product, ProductAdmin)
 admin.site.register(SubProduct, SubProductAdmin)
-
-admin.site.register(Category, MPTTModelAdmin)
-# admin.site.register(CategoryAdmin)
-
-
-# admin.site.register(CategoryAttributes, MPTTModelAdmin)
-# admin.site.register(ProductSpecification)
-
-# admin.site.register(ShippingAddress)
-# admin.site.register(Customer)
-# admin.site.register(Order)
-# admin.site.register(OrderItem)
+admin.site.register(Category, CategoryAdmin)

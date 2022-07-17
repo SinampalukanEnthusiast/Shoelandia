@@ -7,9 +7,12 @@
 
 <div class="container-fluid">
   <div class="col d-flex">
-    <div class="col-lg-2">
+    <div class="col-lg-2 col-md-4 col-sm-3 d-none d-sm-block d-md-block">
       <h4>Filter</h4>
       <hr />
+    </div>
+    <div class="d-block d-sm-none">
+      <h4>my hidden</h4>
     </div>
     <div class="col">
       <div class="row no-gutters container-fluid">
@@ -20,14 +23,14 @@
         <!-- thsi is a comment -->
         {% if sub.is_default %}
         <!-- thsi is a comment -->
-        {% for image in sub.product_image.all %}
+        {% for images in sub.product_image.all %}
         <!-- thsi is a comment -->
-        {% if image.is_feature %}
+        {% if images.is_feature %}
 
         <div class="col p-0">
           <div class="container-fluid p-0">
             <img
-              src="{{image.image.url}}"
+              src="{{images.image.url}}"
               class=""
               style="max-width: 20rem; min-height: 20rem; width: auto"
               alt="..."

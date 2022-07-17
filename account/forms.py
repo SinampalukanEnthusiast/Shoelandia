@@ -1,10 +1,25 @@
-from dataclasses import Field
 from django import forms
 from django.contrib.auth.models import User
 
-from .models import UserBase
+from .models import Addresses, Customer
 from crispy_forms.helper import FormHelper, Layout
 from crispy_forms.layout import Submit
+
+
+class AddressForm(forms.ModelForm):
+    is_default = forms.BooleanField()
+
+    class Meta:
+        model = Addresses
+        fields = ['full_name', 'phone', 'address_line',
+                  'address_line2', 'city', 'province', 'zipcode', 'is_default']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'post'
+        self.helper.add_input(
+            Submit('submit', 'Submit', css_class='btn btn-primary btn-block py-2 mb-4 mt-5 fw500 w-100 '))
 
 
 class LoginForm(forms.ModelForm):
@@ -20,7 +35,7 @@ class LoginForm(forms.ModelForm):
             Submit('submit', 'Login', css_class='btn btn-primary btn-block py-2 mb-4 mt-5 fw500 w-100'))
 
     class Meta:
-        model = UserBase
+        model = Customer
         fields = ['email', 'password']
 
 
@@ -51,13 +66,13 @@ class DashboardEditForm(forms.ModelForm):
             Submit('submit', 'Update', css_class='btn btn-primary btn-block py-2 mb-4 mt-5 fw500 w-100'))
 
     class Meta:
-        model = UserBase
+        model = Customer
         fields = ['email', 'user_name', 'first_name', 'about',
                   'address', 'city', 'province', 'zipcode']
 
 
 class RegistrationForm(forms.ModelForm):
-    user_name = forms.CharField(
+    name = forms.CharField(
         label='Enter username', min_length=4, max_length=50, help_text='Required')
     email = forms.EmailField(max_length=100, help_text='Required', error_messages={
         'required': 'Email is needed'})
@@ -66,12 +81,12 @@ class RegistrationForm(forms.ModelForm):
         label='Repeat Password', widget=forms.PasswordInput)
 
     class Meta:
-        model = UserBase
-        fields = ('user_name', 'email')
+        model = Customer
+        fields = ('name', 'email')
 
     def clean_user_name(self):
-        user_name = self.cleaned_data['user_name'].lower()
-        r = UserBase.objects.filter(user_name=user_name)
+        user_name = self.cleaned_data['name'].lower()
+        r = Customer.objects.filter(name=user_name)
         if r.count():
             raise forms.ValidationError("Username already exists")
         return user_name
@@ -84,14 +99,14 @@ class RegistrationForm(forms.ModelForm):
 
     def clean_email(self):
         email = self.cleaned_data['email']
-        if UserBase.objects.filter(email=email).exists():
+        if Customer.objects.filter(email=email).exists():
             raise forms.ValidationError(
                 'Please use another Email, that is already taken')
         return email
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['user_name'].widget.attrs.update(
+        self.fields['name'].widget.attrs.update(
             {'class': 'form-control mb-3', 'placeholder': 'Username'})
         self.fields['email'].widget.attrs.update(
             {'class': 'form-control mb-3', 'placeholder': 'Email', 'name': 'email', 'id': 'id_email'})
