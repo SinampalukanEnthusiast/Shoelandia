@@ -175,27 +175,20 @@
 <div class="container-fluid pb-5">
   <hr />
   <h1 class="display-4">Related Items</h1>
-  <div>
-    <img
-      class="rounded m-2"
-      data-src="holder.js/100px260/"
-      alt="100%x260"
-      style="max-width: 20rem; min-height: 20rem; width: auto"
-      src="{% if image is None %}../../static/images/placeholder-500x500.png{% else %}{{image.image.url}}{% endif %}"
-      data-holder-rendered="true"
-    />
-    <img
-      class="rounded m-2"
-      data-src="holder.js/100px260/"
-      alt="100%x260"
-      style="max-width: 20rem; min-height: 20rem; width: auto"
-      src="{% if image is None %}../../static/images/placeholder-500x500.png{% else %}{{image.image.url}}{% endif %}"
-      data-holder-rendered="true"
-    />
-  </div>
+  <div class="">
+    {% for related in related_items  %}
+        <a href="{% url 'product_detail' related.subproduct__product__slug %}">
+            <img
+            class="rounded m-2 "
+            data-src="holder.js/100px260/"
+            alt="100%x260"
+            style="max-width: 20rem; min-height: 20rem; width: auto"
+            src="{% if image is None %}../../static/images/placeholder-500x500.png{% else %}../../static/images/{{related.subproduct__product_image__image}}{% endif %}"
+            data-holder-rendered="true"/>
+            
+        </a>
+        {% endfor %}
+        
 </div>
-<div class="col-lg-12 mx-auto">
-  <hr />
-  <h1 class="display-4">Reviews</h1>
-</div>
+
 {% endblock content %}

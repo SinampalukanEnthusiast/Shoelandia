@@ -163,7 +163,7 @@ def set_default(request, id):
         customer=request.user, default=True).update(default=False)
     address = Addresses.objects.filter(
         customer=request.user, pk=id).update(default=True)
-    messages.success(request, 'Address set default successfuly!')
+    messages.success(request, 'Address set successfully!')
     prev_url = request.META.get("HTTP_REFERER")
     if "delivery_address" in prev_url:
         return redirect("delivery_address")

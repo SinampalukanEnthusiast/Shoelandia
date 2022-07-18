@@ -111,6 +111,10 @@ def payment_complete(request):
     user_id = request.user.id
     requestorder = OrdersGetRequest(data)
     response = PPClient.client.execute(requestorder)
+    """for i in response.result.purchase_units[0].shipping.address:
+        print(i)
+    """
+
     try:
         address2 = response.result.purchase_units[0].shipping.address.address_line_2
     except:

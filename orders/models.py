@@ -24,9 +24,13 @@ class Order(models.Model):
     order_key = models.CharField(max_length=200)
     billing_status = models.BooleanField(
         default=False, verbose_name="Payment Status")
-    #is_processing = models.BooleanField(default=False, verbose_name="Processing Status")
-    #is_delivered = models.BooleanField(default=False, verbose_name="Delivery Status")
-    #is_returned = models.BooleanField(default=False, verbose_name="Return Status")
+    is_processing = models.BooleanField(
+        default=False, verbose_name="Processing Status", null=True)
+    is_delivered = models.BooleanField(
+        default=False, verbose_name="Delivery Status", null=True)
+    is_returned = models.BooleanField(
+        default=False, verbose_name="Return Status", null=True)
+
     payment_option = models.CharField(max_length=200, blank=True)
 
     class Meta:

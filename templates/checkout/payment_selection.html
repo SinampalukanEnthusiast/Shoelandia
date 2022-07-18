@@ -3,59 +3,70 @@
 {% block content %}
 <div class="container">
   <div class="col-12">
-    <h1 class="h2">Payment Options</h1>
+    <h1 class="display-4">Payment Options</h1>
   </div>
-  <div class="col-12">
-    <p>Please select your payment option</p>
-  </div>
+
   <hr />
 </div>
 
 <div class="container">
   <div class="row g-3">
-    <div class="col-md-4 col-lg-4 order-md-last p-0 order-3">
-      <div class="d-flex bd-highlight ms-0">
-        <div class="p-2 flex-grow-1 bd-highlight">
-          <h5>Sub Total:</h5>
-        </div>
-        <div class="p-2 bd-highlight">
-          <span class="fw-bold h5">&#x20b1;</span
-          ><span id="sub_total" class="fw-bold h5"
-            >{{basket.get_subtotal}}</span
-          >
+      <div class="col-md-6 col-lg-6 pe-0 pe-md-5">
+        <div id="paypal-button-container"></div>
+        <div class="pt-2">
+        <a href="#" class="btn btn-info btn-lg btn-block w-100 h-100 my-3">Pay with Cash on Delivery</a>
+        <a href="#" class="btn btn-primary btn-lg btn-block w-100 h-100">Pay with GCASH</a>
         </div>
       </div>
-      <div class="d-flex bd-highlight">
-        <div class="p-2 flex-grow-1 bd-highlight">
-          <h5>Shipping Fee:</h5>
-        </div>
-        <div class="p-2 bd-highlight">
-          <span class="fw-bold h5">&#x20b1;</span
-          ><span id="delivery_price" class="fw-bold h5"
-            >{{basket.get_delivery_price}}</span
-          >
-        </div>
-      </div>
-      <hr />
+    <div class="col-md-6">
+          <h1 class="font-weight-light">Summary</h1>
+          <div class="row">
+            <div class="col">
+               <h4 class="col font-weight-light d-inline">
+                          Sub Total:
+               </h4>
+            </div>
+            <h4 class="font-weight-bold">&#x20b1;</h4>
+            <div class="col"><h4 class="col font-weight-bold" id="subtotal">
+                           {{ basket.get_subtotal }} </h4></div>
+          </div>
+          <div class="row">
+            <div class="col">
+                 <h4 class="col font-weight-light d-inline">
+                  Shipping Fee:
+                 </h4>
+            </div>
+            <h4 class="font-weight-bold">&#x20b1;</h4>
 
-      <div class="d-flex bd-highlight">
-        <div class="p-2 flex-grow-1 bd-highlight"><h5>Total:</h5></div>
-        <div class="p-2 bd-highlight">
-          <span class="fw-bold h5">&#x20b1;</span
-          ><span id="total" class="fw-bold h5">{{basket.get_total_price}}</span>
-        </div>
-      </div>
-      <a
-        role="button"
-        href="{% url 'payment_selection' %}"
-        class="btn btn-success fw-bold w-100"
-        type="button"
-        >Proceed to payment</a
-      >
+            <div class="col"><h4 class="col font-weight-bold " id="shippingfee">
+                          {{basket.get_delivery_price}} </h4></div>
+          </div>
+          <hr class="featurette-divider">
+
+          <div class="row">
+            <div class="col">
+              <h4 class="col font-weight-light d-inline">
+                Total:
+               </h4>
+            </div>
+            <h4 class="font-weight-bold">&#x20b1;</h4>
+
+            <div class="col"><h4 class="col font-weight-bold" id="total">
+                {{basket.get_subtotal}}</h4></div>
+          </div>
+          <div class="row pt-5 pb-5">
+              <a
+              role="button"
+              href="{% url 'payment_selection' %}"
+              class="btn btn-success btn-lg fw-bold w-100"
+              type="button"
+              >Proceed to payment</a
+              >               
+          </div>
+          
+              
     </div>
-    <div class="col-md-7 col-lg-8 pe-0 pe-md-5">
-      <div id="paypal-button-container"></div>
-    </div>
+
   </div>
 </div>
 <script
@@ -84,7 +95,7 @@
       .Buttons({
         style: {
           shape: "rect",
-          color: "blue",
+          color: "gold",
           layout: "vertical",
           label: "paypal",
         },

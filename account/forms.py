@@ -7,12 +7,10 @@ from crispy_forms.layout import Submit
 
 
 class AddressForm(forms.ModelForm):
-    is_default = forms.BooleanField()
-
     class Meta:
         model = Addresses
         fields = ['full_name', 'phone', 'address_line',
-                  'address_line2', 'city', 'province', 'zipcode', 'is_default']
+                  'address_line2', 'city', 'province', 'zipcode', ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

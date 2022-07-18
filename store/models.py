@@ -31,7 +31,7 @@ class Product(models.Model):
         max_length=255,
     )
     description = models.TextField(
-        verbose_name="description", help_text="Not Required", blank=True)
+        verbose_name="description", help_text="Add relevant keywords for optimal searching", blank=True)
     slug = models.SlugField(max_length=255)
     regular_price = models.DecimalField(
         verbose_name="Regular price",

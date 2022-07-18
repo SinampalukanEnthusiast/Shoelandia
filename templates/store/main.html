@@ -45,62 +45,7 @@
       type="image/png"
       href="{% static 'favicon.ico' %}"
     />
-    <script type="text/javascript">
-      var user = "{{request.user}}";
 
-      //from ajax documentation called getCookie.
-      function getToken(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie != "") {
-          var cookies = document.cookie.split(";");
-          for (var i = 0; i < cookies.length; i++) {
-            var cookie = cookies[i].trim();
-            //Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === name + "=") {
-              cookieValue = decodeURIComponent(
-                cookie.substring(name.length + 1)
-              );
-              break;
-            }
-          }
-        }
-
-        return cookieValue;
-      }
-
-      function getCookie(name) {
-        // Split cookie string and get all individual name=value pairs in an array
-        var cookieArr = document.cookie.split(";");
-
-        // Loop through the array elements
-        for (var i = 0; i < cookieArr.length; i++) {
-          var cookiePair = cookieArr[i].split("=");
-
-          /* Remove whitespace at begining of cookie name
-				and compare it with the given string */
-          if (name == cookiePair[0].trim()) {
-            //Decode the cookie value and return
-            return decodeURIComponent(cookiePair[1]);
-          }
-        }
-
-        // Return null if not found
-        return null;
-      }
-
-      var csrftoken = getToken("csrftoken");
-      var cart = JSON.parse(getCookie("cart"));
-
-      //create cart if needed
-      if (cart == undefined) {
-        cart = {};
-        console.log("Cart Created: ", cart);
-        // cart should be single value and not a object so stringify is used to make that happen
-        // want to set the cookie for main domain of the website
-        document.cookie = "cart=" + JSON.stringify(cart) + ";domain=;path=/";
-      }
-      console.log("Cart: ", cart);
-    </script>
 
     <link
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
@@ -127,6 +72,5 @@
       <!-- this is a comment -->
       {% endblock content %} {% include "store/footer.html" %}
     </div>
-    <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
   </body>
 </html>

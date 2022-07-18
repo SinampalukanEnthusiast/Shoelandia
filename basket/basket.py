@@ -23,11 +23,14 @@ class Basket():
     def add(self, product, qty, size, variant):
         product_id = str(product.id)
         product_name = str(product.title)
+        product_variant = str(variant)
+        print(f'VARIANT: {product_variant}')
         print(f'product name: {product_name}')
         images = ProductImage.objects.filter(
-            sub_product__product__title=product_name).filter(is_feature=True).values('image')
-        for image in images:
-            image = image
+            sub_product__productcolor__color=product_variant).filter(is_feature=True).values('image')
+        image = images[0]
+
+        print(f'IMAGE: {image}')
         if product_id in self.basket:
             self.basket[product_id]['qty'] = qty
             self.basket[product_id]['size'] = size

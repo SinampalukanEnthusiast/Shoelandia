@@ -1,8 +1,9 @@
-from re import sub
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from .models import *
 from django.db.models import Count
+from django.db.models import Q
+from django.contrib import messages
 
 
 def home(request):
@@ -16,18 +17,39 @@ def home(request):
 
 
 def store(request):
-    query = request.GET.getlist('category')
-    print(f'query: {query}')
+    category_query = request.GET.getlist('category')
+    search_query = request.GET.get('search')
+    # color_query = request.GET.getlist('color')
+    # color_query = request.GET.getlist('price')
+    print(f'search query: {search_query}')
 
-    try:
+    if category_query:
+        category_selected = Category.objects.filter(
+            product__category__slug__in=category_query).values('slug')
         products = Product.objects.filter(
-            category__slug=query[0])
-    except:
+            category__slug__in=category_query)
+        search_query = None
+        if not products:
+            messages.success(request, "No matching product found")
+
+    elif search_query:
+        products = Product.objects.filter(
+            Q(description__search=search_query) | Q(title__search=search_query))
+        category_selected = None
+        if not products:
+            messages.success(
+                request, f'No matching product found for "{search_query}"')
+    else:
         products = Product.objects.all()
-    category_data = Category.objects.filter().values('name', 'slug')
-    for i in category_data:
-        print(i)
-    context = {'products': products, 'category_data': category_data, }
+        category_selected = None
+        search_query = None
+
+    category_data = Category.objects.filter().values('name', 'slug', )
+    print(f'category : {category_selected}')
+    print(f'products data : {products}')
+
+    context = {'products': products, 'category_selected': category_selected,
+               'category_data': category_data, }
     return render(request, 'store/store.html', context)
 
 
@@ -35,20 +57,14 @@ def get_practice(request):
     category_data = Category.objects.all()
     products_data = Product.objects.all()
     sub_product = SubProduct.objects.filter().values('sub_name', 'product')
-    # print(products_data.subproduct_set.all())
     context = {'category_data': category_data,
                "products_data": products_data, "sub_product": sub_product}
     return render(request, 'store/categories.html', context)
 
 
 def product_detail(request, slug):
-    """Reverse searches subproducts from product object.
+    """Reverse searches variants, images, sizes from product object.
     """
-
-    # todo, make detail image reflective of selected option,
-    # make summary image reflective of option
-    # make order page mockup
-    ##
     color_get = []
     sizes = []
     if request.GET:
@@ -60,7 +76,9 @@ def product_detail(request, slug):
     color_selected = None
     product = get_object_or_404(Product, slug=slug)
     colors = SubProduct.objects.filter(
-        product__slug=slug).values('sub_name', 'productcolor__color',  'is_default')
+        product__slug=slug).values('sub_name', 'productcolor__color',  'is_default', 'product__category__name')
+    product_category = colors[0]['product__category__name']
+    print(f'OUTCAT: {product_category}')
     if color_get:
         color_selected = SubProduct.objects.filter(
             product__slug=slug).filter(productcolor__color__in=color_get).values('sub_name',).annotate(is_selected=Count('sub_name'))
@@ -90,20 +108,27 @@ def product_detail(request, slug):
     featured_image = None
 
     try:
-        image = ProductImage.objects.get(
-            sub_product__product__slug=slug, sub_product__is_default=True, is_feature=True)
+        if color_get:
+            image = ProductImage.objects.get(
+                sub_product__productcolor__color=color_get[0], sub_product__product__slug=slug, )
+        else:
+            image = ProductImage.objects.get(
+                sub_product__product__slug=slug, sub_product__is_default=True, is_feature=True)
     except:
         image = None
 
     print(f'imageasdsas: {type(image)}')
 
+    related_items = Product.objects.filter(
+        category__name=product_category).filter(subproduct__is_default=True).values("subproduct__product__slug", "subproduct__product_image__image")
+    print(f"RELATEDITEMS: {related_items}")
     if color_get:
         context = {'product': product, 'image': image,
-                   'sizes': sizes, 'stock': total_stock, 'colors': colors, 'color_selected': color_selected, 'variant': color_get[0]}
+                   'sizes': sizes, 'stock': total_stock, 'colors': colors, 'color_selected': color_selected, 'variant': color_get[0], 'related_items': related_items}
     else:
 
         context = {'product': product, 'image': image,
-                   'sizes': sizes, 'stock': total_stock, 'colors': colors, 'color_selected': color_selected, }
+                   'sizes': sizes, 'stock': total_stock, 'colors': colors, 'color_selected': color_selected, 'related_items': related_items}
     return render(request, 'store/product_detail.html', context)
 
 
