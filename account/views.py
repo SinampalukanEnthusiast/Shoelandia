@@ -43,10 +43,10 @@ def dashboard_edit(request):
                   'account/user/dashboard_edit.html', {'form': user_form})
 
 
+@login_required
 def orders(request):
     customer = request.user.id
     orders = Order.objects.filter(user_id=customer)
-    print(orders)
     context = {'orders': orders}
     return render(request, "account/user/orders.html", context)
 
@@ -63,16 +63,13 @@ def order_detail(request, id):
 
     # print(orders)
     for i in orders:
-        print(i['order_key'])
         key = i['order_key']
         paid = i['total_paid']
         payment = i['payment_option']
         filters_name.append(i['items__product__title'])
         filters_variant.append(i['items__variant'])
-    print(filters_name)
     image = ProductImage.objects.filter(
-        sub_product__product__title__in=filters_name,).filter(sub_product__productcolor__color__in=filters_variant).values('image', 'sub_product__product__title')
-
+        sub_product__product__title__in=filters_name,).filter(sub_product__productcolor__color__in=filters_variant, ).values('image', 'sub_product__product__title')
     context = {'orders': orders, 'key': key,
                'paid': paid, 'payment': payment, 'images': image}
     return render(request, "account/user/order_detail.html", context)
@@ -109,15 +106,6 @@ def account_register(request):
             user.set_password(registerForm.cleaned_data['password'])
             user.is_active = True
             user.save()
-            # current_site = get_current_site(request)
-            # subject = 'Activate your Account'
-            # message = render_to_string('account/registration/activate_email.html', {
-            #     'user': user,
-            #     'domain': current_site.domain,
-            #     'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-            #     'token': account_activation_token.make_token(user),
-            # })
-            # user.email_user(subject=subject, message=message)
             return redirect('dashboard')
     else:
         registerForm = RegistrationForm()
@@ -160,14 +148,9 @@ def add_address(request):
             address_form.save()
             messages.success(request, 'Address added!')
             prev_url = request.META.get("HTTP_REFERER")
-            # if "delivery_address" in prev_url:
-            #     return redirect("delivery_address")
             return HttpResponseRedirect(prev_url)
     else:
         address_form = AddressForm()
-        # for item in address_form:
-        #     print(item)
-
     context = {'form': address_form}
 
     return render(request, 'account/user/address_edit.html', context)

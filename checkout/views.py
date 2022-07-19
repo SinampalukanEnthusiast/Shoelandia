@@ -1,18 +1,13 @@
 
 from paypalcheckoutsdk.orders import OrdersGetRequest
-from account.forms import AddressForm
 
-from account.views import addresses
 from .paypal import PayPalClient
-from datetime import datetime
 import json
-from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 import uuid
-# from account.models import Address
 from basket.basket import Basket
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
 from orders.models import Order, OrderItem
 
@@ -32,7 +27,6 @@ def deliverychoices(request):
         return redirect('basket_summary')
 
     deliveryoptions = DeliveryOptions.objects.all()
-    print(deliveryoptions)
     context = {"form": AddressCheckoutForm(),
                "deliveryoptions": deliveryoptions, 'session': request.session}
 
@@ -96,8 +90,6 @@ def payment_selection(request):
     address = Addresses.objects.filter(
         id=request.session["address"]['address_id'])
     basket = Basket(request)
-    for item in basket:
-        print(f'in basket: {item}')
     if "purchase" not in request.session:
         messages.success(request, "Please select a delivery option")
         return redirect("deliverychoices")
@@ -118,11 +110,6 @@ def payment_complete(request):
     user_id = request.user.id
     requestorder = OrdersGetRequest(data)
     response = PPClient.client.execute(requestorder)
-    try:
-        for i in response.result.purchase_units[0].shipping.address:
-            print(f"payment complete: {i}")
-    except:
-        print("PRINT FAILED")
     CURRENCY_CONVERSION = 40
     try:
         address2 = response.result.purchase_units[0].shipping.address.address_line_2
@@ -163,65 +150,13 @@ def payment_complete(request):
 
 
 @login_required
-def payment_complete_cod(request):
-    session = request.session
-    basket = Basket(request)
-    PPClient = PayPalClient()
-    address2 = ""
-    city = ""
-    phone = ""
-    body = json.loads(request.body)
-    data = body["orderID"]
-    user_id = request.user.id
-    requestorder = OrdersGetRequest(data)
-    response = PPClient.client.execute(requestorder)
-
-    CURRENCY_CONVERSION = 40
-    try:
-        address2 = response.result.purchase_units[0].shipping.address.address_line_2
-    except:
-        address2 = ""
-    try:
-        city = response.result.purchase_units[0].shipping.address.admin_area_2
-    except:
-        city = ""
-
-    total_paid = response.result.purchase_units[0].amount.value
-    total_paid = round(Decimal(total_paid), 2)
-    order = Order.objects.create(
-        user_id=user_id,
-        full_name=response.result.purchase_units[0].shipping.name.full_name,
-        email=response.result.payer.email_address,
-        address1=response.result.purchase_units[0].shipping.address.address_line_1,
-        address2=address2,
-        city=city,
-        postal_code=response.result.purchase_units[0].shipping.address.postal_code,
-        country_code=response.result.purchase_units[0].shipping.address.country_code,
-        phone=phone,
-        total_paid=total_paid,
-        order_key=response.result.id,
-        payment_option="paypal",
-        billing_status=True,
-    )
-
-    order_id = order.pk
-
-    for item in basket:
-        price = item["price"]
-        price = round(Decimal(price), 2)
-        OrderItem.objects.create(
-            order_id=order_id, product=item["product"], price=price, quantity=item["qty"])
-
-    return JsonResponse("Payment completed!", safe=False)
-
-
-@login_required
 def payment_successful(request):
     basket = Basket(request)
     basket.clear()
     return render(request, "checkout/payment_successful.html", )
 
 
+@login_required
 def payment_complete_cod(request):
     basket = Basket(request)
     session = request.session

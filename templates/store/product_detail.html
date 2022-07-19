@@ -1,8 +1,8 @@
 {% extends "store/main.html" %} {% load static %} {% block content %}
 
-<div class="container-fluid d-flex justify-content-center">
+<div class="container-fluid">
   <div class="col d-flex">
-    <div class="col-lg-3"></div>
+    <div class="col-lg-2"></div>
     <div class="row">
       <div class="col">
         <div class="container-fluid pb-5">
@@ -13,12 +13,12 @@
             data-src="holder.js/100px260/"
             alt="100%x260"
             style="max-width: 40rem; min-height: 40rem; width: auto"
-            src="{% if image is None %}../../static/images/placeholder-500x500.png{% else %}{{image.image.url}}{% endif %}"
+            src="{% if image is None %} /static/images/placeholder-500x500.png{% else %}{{image.image.url}}{% endif %}"
             data-holder-rendered="true"
           />
         </div>
       </div>
-      <div class="col">
+      <div class="col-lg-6">
         <div class="">
           <div class="card-body p-0">
             <h1 class="font-weight-normal">{{product.title}}</h1>
@@ -60,7 +60,7 @@
           <br />
           <h5 class="font-weight-light">Sizes available</h5>
           <div class="btn-group btn-group-toggle" data-toggle="buttons">
-            {% if sizes %} {% for size in sizes %}
+            {% if sizes %} {% for size in sizes|slice:"0:5" %}
             <label
               class="btn btn-outline-secondary"
               id="size-target"
@@ -169,7 +169,6 @@
         </script>
       </div>
     </div>
-    <div class="col-lg-2 ml-auto p-2"></div>
   </div>
 </div>
 <div class="container-fluid pb-5">

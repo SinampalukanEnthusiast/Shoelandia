@@ -24,13 +24,10 @@ class Basket():
         product_id = str(product.id)
         product_name = str(product.title)
         product_variant = str(variant)
-        print(f'VARIANT: {product_variant}')
-        print(f'product name: {product_name}')
         images = ProductImage.objects.filter(
-            sub_product__productcolor__color=product_variant).filter(is_feature=True, sub_product__product__title=product_name).values('image')
+            sub_product__productcolor__color=product_variant).filter(sub_product__product__title=product_name).values('image')
         image = images[0]
 
-        print(f'IMAGE: {image}')
         if product_id in self.basket:
             self.basket[product_id]['qty'] = qty
             self.basket[product_id]['size'] = size
@@ -39,9 +36,6 @@ class Basket():
         else:
             self.basket[product_id] = {'price': str(
                 product.regular_price), 'qty': qty, 'size': size, 'image': image["image"], 'variant': variant}
-        print('print inside .add: ')
-        print(self.basket)
-
         self.save()
 
     def __iter__(self):

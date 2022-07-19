@@ -112,14 +112,18 @@ class SubProduct(models.Model):
 class ProductSizes(models.Model):
     sub_product = models.ForeignKey(SubProduct, on_delete=models.RESTRICT)
 
-    # Complete size choices
-    SIZE_CHOICES = [("EU16", 8.1),
-                    ("EU27", 16.1),
-                    ("EU28", 16.6),
-                    ("EU35", 21.2), ]
+    SIZE_CHOICES = [("EU16", 8.1), ("EU17", 9),  ("EU18", 9.8),
+                    ("EU19", 10.6), ("EU20", 11.5), ("EU21", 12.3),
+                    ("EU22", 12.8), ("EU23", 13.2), ("EU23.5", 13.6),
+                    ("EU24", 14), ("EU25", 14.5), ("EU25.5", 14.9),
+                    ("EU26", 15.3), ("EU26.5", 15.7), ("EU27", 16.1),
+                    ("EU28", 16.6), ("EU28.5", 17), ("EU29", 17.4),
+                    ("EU30", 17.8), ("EU30.5", 18.3), ("EU31", 18.7),
+                    ("EU31.5", 19.1), ("EU32", 19.5), ("EU33", 20),
+                    ("EU33.5", 20.4), ("EU34", 20.8), ("EU35", 21.2), ]
 
     size = models.CharField(verbose_name="Subproduct Size",
-                            help_text="Sizes are in CM.", max_length=255, choices=SIZE_CHOICES)
+                            help_text="Sizes are in CM. 0-3 y/o (EU16-EU28), 4-7 y/o (EU28-EU35)", max_length=255, choices=SIZE_CHOICES)
     stock_amount = models.IntegerField(
         verbose_name="Stock amount.", help_text="Number of stock in inventory.", default=0)
 
@@ -154,11 +158,6 @@ class ProductColor(models.Model):
 
 
 class ProductImage(models.Model):
-    """
-    The Subproduct Image table.
-    """
-    # make image required
-    # make is feature required
     sub_product = models.ForeignKey(
         SubProduct, on_delete=models.CASCADE, related_name="product_image")
     image = models.ImageField(
