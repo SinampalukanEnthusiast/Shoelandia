@@ -10,4 +10,7 @@ urlpatterns = [
     path("payment_complete/", views.payment_complete, name="payment_complete"),
     path("payment_successful/", views.payment_successful,
          name="payment_successful"),
+    path("CoD/", views.payment_complete_cod,
+         name="cash_on_delivery"),
+
 ]

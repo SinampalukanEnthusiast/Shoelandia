@@ -55,24 +55,3 @@ class DeliveryOptions(models.Model):
 
     def __str__(self):
         return self.delivery_name
-
-
-class PaymentSelections(models.Model):
-    """
-    Store payment options
-    """
-
-    name = models.CharField(
-        verbose_name="name",
-        help_text="Required",
-        max_length=255,
-    )
-
-    is_active = models.BooleanField(default=True)
-
-    class Meta:
-        verbose_name = "Payment Selection"
-        verbose_name_plural = "Payment Selections"
-
-    def __str__(self):
-        return self.name

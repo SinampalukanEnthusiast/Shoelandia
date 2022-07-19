@@ -3,6 +3,8 @@ from email.headerregistry import Address
 from pickle import TRUE
 
 from django.urls import reverse
+
+from store.models import ProductImage
 from .models import Addresses, Customer
 from .forms import AddressForm, RegistrationForm, LoginForm, DashboardEditForm
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
@@ -15,7 +17,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from orders.models import Order
+from orders.models import Order, OrderItem
+from django.db.models import Q
+from itertools import chain
 
 
 @login_required
@@ -40,12 +44,47 @@ def dashboard_edit(request):
 
 
 def orders(request):
-
     customer = request.user.id
     orders = Order.objects.filter(user_id=customer)
     print(orders)
     context = {'orders': orders}
     return render(request, "account/user/orders.html", context)
+
+
+def order_detail(request, id):
+    orders = Order.objects.filter(items__order__id=id).values(
+        'full_name', 'address1', 'address2', 'city', 'phone', 'postal_code', 'total_paid',
+        'order_key', 'created',  'billing_status', 'is_delivered', 'is_processing', 'is_returned',
+        'items__product__title', 'items__quantity', 'items__price', 'payment_option', 'items__variant', 'items__size', )
+
+    key = ""
+    filters_name = []
+    filters_variant = []
+
+    # print(orders)
+    for i in orders:
+        print(i['order_key'])
+        key = i['order_key']
+        paid = i['total_paid']
+        payment = i['payment_option']
+        filters_name.append(i['items__product__title'])
+        filters_variant.append(i['items__variant'])
+    print(filters_name)
+    image = ProductImage.objects.filter(
+        sub_product__product__title__in=filters_name,).filter(sub_product__productcolor__color__in=filters_variant).values('image', 'sub_product__product__title')
+
+    context = {'orders': orders, 'key': key,
+               'paid': paid, 'payment': payment, 'images': image}
+    return render(request, "account/user/order_detail.html", context)
+
+
+def return_order(request, pk):
+    order = Order.objects.filter(
+        id=pk,)
+    order.update(is_returned=True, is_processing=True)
+    messages.success(
+        request, f'We are now processing your returns and refund!')
+    return redirect('orders')
 
 
 @login_required

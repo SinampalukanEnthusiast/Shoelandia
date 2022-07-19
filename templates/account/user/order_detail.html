@@ -1,0 +1,106 @@
+{% extends "../../store/main.html" %} {% load static %} {% block content %}
+
+<div class="container">
+  <div class="container d-flex justify-content-between ">
+    <h1 class="display-4 ">Order Details</h1>
+    <h5 class="text-muted mt-auto">
+      <small><a href="{% url 'orders' %}">Go back</a></small>
+    </h5>
+  </div>
+  <hr />
+  <div class="container d-flex justify-content-center">
+    <div class="container-fluid">
+      <div class="card-header my-2">
+        <div class="font-weight-bold h4 text-muted">Reference ID: {{key}}</div>
+      </div>
+      <div class="container-fluid">
+        {% for order in orders %} 
+        <div class="row">
+  <div class="row">
+    <div class="col">
+    <div class="col">
+          {% for image in images  %}
+                        {% if image.sub_product__product__title == order.items__product__title %}
+            <div class="pb-2 ">
+              <img
+                src=" /static/images/{{image.image}}"
+                alt="..."
+                style="aspect-ratio: 1/1;"
+                class="img-thumbnail"
+              />
+            </div>                          
+                        {% endif %}
+          {% endfor %}
+          </div>
+    </div>
+    <div class="col">
+                  <div class="card p-2">
+              <div class="card-header">
+                {% if order.billing_status %}
+                <span class="bg-success rounded p-1 m-1 text-white"> Paid</span>
+                {% elif order.is_processing %}
+                <span class="bg-warning rounded p-1 m-1 text-white">
+                  Processing</span
+                >
+                {% endif %} {% if order.is_delivered %}
+                <span class="bg-success rounded p-1 m-1 text-white">
+                  Delivered</span
+                >
+                {% endif %} {% if order.is_returned %}
+                <span class="bg-danger rounded p-1 m-1 text-white">
+                  Returned</span
+                >
+                {% endif %}
+              </div>
+              <div class="card-body d-inline-flex">
+                <div class="container">
+                  <div class="row">
+                    <div class="col">
+                      <div class="container">
+
+                        <div class="col">
+                          <div class="container pt-2">
+                            <address>
+                              <strong>{{order.items__product__title}} </strong> | {{order.items__variant}} | {{order.items__size}} | 
+                              <br />
+                              &#x20b1;{{order.items__price}} | Qty:
+                              {{order.items__quantity}}
+                              <br />{{order.address1}}, {{order.address2}},
+                              {{order.city}}, {{order.postal_code}}
+                              <br />
+                              {{order.phone}} <br /><br />
+                              <span class="text-muted"
+                                >Ordered on: {{order.created}}</span
+                              >
+                            </address>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+    </div>
+          
+      </div>
+        </div>
+        {% endfor %}
+
+      </div>
+                <div class="container-fluid pt-2">
+            <div class="card">
+              <div class="card-header pb-3">&nbsp;</div>
+              <div class="card-body">
+                <h5>Payment method: {{payment}}</h5>
+                <hr />
+                <p class="h4">
+                  <strong>Total Paid: &#x20b1; {{paid}}</strong>
+                </p>
+              </div>
+            </div>
+          </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

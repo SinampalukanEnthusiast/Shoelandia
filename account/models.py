@@ -32,7 +32,6 @@ class CustomAccountManager(BaseUserManager):
 class Customer(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField('email address', unique=True)
     name = models.CharField(max_length=150,)
-    mobile = models.CharField(max_length=20, blank=True)  # delete
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_delivery = models.BooleanField(default=False)

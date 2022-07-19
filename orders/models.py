@@ -14,10 +14,12 @@ class Order(models.Model):
     address1 = models.CharField(max_length=250)
     address2 = models.CharField(max_length=250, blank=True)
     city = models.CharField(max_length=100)
-    phone = models.CharField(max_length=100)  # move down
-    # province = models.CharField(max_length=100)
+    province = models.CharField(
+        max_length=100, null=True, blank=True)
     postal_code = models.CharField(max_length=20)
     country_code = models.CharField(max_length=4, blank=True)
+    phone = models.CharField(max_length=100, null=True,
+                             blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     total_paid = models.DecimalField(max_digits=9, decimal_places=2)
@@ -47,8 +49,10 @@ class OrderItem(models.Model):
     product = models.ForeignKey(Product,
                                 related_name='order_items',
                                 on_delete=models.CASCADE)
-    #variant = models.CharField(max_length=50, blank=True, verbose_name="Product Variant")
-    #size = models.CharField(max_length=50, blank=True, verbose_name="Product Size")
+    variant = models.CharField(
+        max_length=50, blank=True, verbose_name="Product Variant", null=True)
+    size = models.CharField(max_length=50, blank=True,
+                            verbose_name="Product Size", null=True)
     price = models.DecimalField(max_digits=9, decimal_places=2)
     quantity = models.PositiveIntegerField(default=1)
 

@@ -36,51 +36,7 @@
             <div class="card-body">
               {% for category in category_data %}
 
-              <div class="container font-weight-light">
-                <input type="checkbox" id="target-{{category.slug}}"
-                value="{{category.slug}}" data-attribute="category" 
-                {% for option in category_selected %} 
-                {% if option.slug == category.slug %} 
-                checked
-                {% endif %} 
-                {% endfor %} />
-                {{category.name}}
-              </div>
-              <hr>
-              {% endfor %}
-              <div class="container p-2">
-                <button type="button" class="btn btn-light" id="category-apply">
-                  Apply
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-         <div class="card" id="category-menu">
-          <div class="card-header" id="headingOne">
-            <h5 class="mb-0">
-              <button
-                class="btn btn-link"
-                data-toggle="collapse"
-                data-target="#collapseTwo"
-                aria-expanded="true"
-                aria-controls="collapseTwo"
-              >
-                Colors
-              </button>
-            </h5>
-          </div>
-
-          <div
-            id="collapseTwo"
-            class="collapse "
-            aria-labelledby="headingTwo"
-            data-parent="#accordion"
-          >
-            <div class="card-body">
-              {% for category in category_data %}
-
-              <div class="container p-1 font-weight-light">
+              <div class="container font-weight-light list-group-item">
                 <input type="checkbox" id="target-{{category.slug}}"
                 value="{{category.slug}}" data-attribute="category" 
                 {% for option in category_selected %} 
@@ -92,13 +48,14 @@
               </div>
               {% endfor %}
               <div class="container p-2">
-                <button type="button" class="btn btn-light" id="category-apply">
+                <button type="button" class="btn btn-block btn-outline-secondary " id="category-apply">
                   Apply
                 </button>
               </div>
             </div>
           </div>
         </div>
+
       </div>
     </div>
 

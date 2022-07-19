@@ -52,6 +52,8 @@ def store(request):
                'category_data': category_data, }
     return render(request, 'store/store.html', context)
 
+# delete later
+
 
 def get_practice(request):
     category_data = Category.objects.all()

@@ -27,7 +27,7 @@ class Basket():
         print(f'VARIANT: {product_variant}')
         print(f'product name: {product_name}')
         images = ProductImage.objects.filter(
-            sub_product__productcolor__color=product_variant).filter(is_feature=True).values('image')
+            sub_product__productcolor__color=product_variant).filter(is_feature=True, sub_product__product__title=product_name).values('image')
         image = images[0]
 
         print(f'IMAGE: {image}')
@@ -118,4 +118,5 @@ class Basket():
         del self.session[settings.BASKET_SESSION_ID]
         del self.session["address"]
         del self.session["purchase"]
+        # del self.session["order_id"]
         self.save()

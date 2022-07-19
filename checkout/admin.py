@@ -1,5 +1,4 @@
 from django.contrib import admin
-from .models import DeliveryOptions, PaymentSelections
+from .models import DeliveryOptions
 
 admin.site.register(DeliveryOptions)
-admin.site.register(PaymentSelections)

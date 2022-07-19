@@ -42,19 +42,11 @@ class DashboardEditForm(forms.ModelForm):
     email = forms.EmailField(widget=forms.TextInput(
         attrs={"readonly": True, "placeholder": "email"}), required=True)
     user_name = forms.CharField(widget=forms.TextInput(
-        attrs={"readonly": True}), required=True)
+        attrs={"readonly": False}), required=True)
     #password = forms.CharField(widget=forms.PasswordInput,)
     first_name = forms.CharField(required=False)
     about = forms.CharField(
         max_length=150, widget=forms.Textarea(attrs={"placeholder": "Description about you..."}), required=False)
-    address = forms.CharField(required=False, widget=forms.TextInput(
-        attrs={"placeholder": "House No, Lot No., Street Name... "}))
-    city = forms.CharField(required=False, widget=forms.TextInput(
-        attrs={"placeholder": "City or Municipality Name..."}))
-    province = forms.CharField(required=False, widget=forms.TextInput(
-        attrs={"placeholder": "Province Name..."}))
-    zipcode = forms.CharField(required=False, widget=forms.TextInput(
-        attrs={"placeholder": "Area code..."}))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -65,8 +57,7 @@ class DashboardEditForm(forms.ModelForm):
 
     class Meta:
         model = Customer
-        fields = ['email', 'user_name', 'first_name', 'about',
-                  'address', 'city', 'province', 'zipcode']
+        fields = ['email', 'user_name', 'first_name', 'about', ]
 
 
 class RegistrationForm(forms.ModelForm):

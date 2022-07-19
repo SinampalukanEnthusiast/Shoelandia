@@ -7,18 +7,8 @@ from store.models import Product, ProductImage
 
 def basket_summary(request):
     basket = Basket(request)
-    out = []
-    for i in basket:
-        if i['variant']:
-            out = i['variant']
-    print(f'OUT: {out}')
     context = {'basket': basket}
-    data = ProductImage.objects.filter().values()
-    #print(f"data: {data}")
-    product_name = "Red Air Max"
-    output = ProductImage.objects.filter(
-        sub_product__productcolor__color=out).filter(is_feature=True)
-    print(output)
+
     return render(request, "basket/summary.html", context)
 
 

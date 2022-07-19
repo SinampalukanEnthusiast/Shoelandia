@@ -12,10 +12,10 @@
 <div class="container">
   <div class="row g-3">
       <div class="col-md-6 col-lg-6 pe-0 pe-md-5">
-        <div id="paypal-button-container"></div>
+        <div id="paypal-button-container" class="pb-2"></div>
+        <hr>
         <div class="pt-2">
-        <a href="#" class="btn btn-info btn-lg btn-block w-100 h-100 my-3">Pay with Cash on Delivery</a>
-        <a href="#" class="btn btn-primary btn-lg btn-block w-100 h-100">Pay with GCASH</a>
+        <a href="#" class="btn btn-info btn-lg btn-block w-100 h-100 my-3 " data-toggle="modal" data-target="#exampleModalCenter">Pay with Cash on Delivery</a>
         </div>
       </div>
     <div class="col-md-6">
@@ -52,21 +52,70 @@
             <h4 class="font-weight-bold">&#x20b1;</h4>
 
             <div class="col"><h4 class="col font-weight-bold" id="total">
-                {{basket.get_subtotal}}</h4></div>
+                {{basket.get_total_price}}</h4></div>
           </div>
           <div class="row pt-5 pb-5">
               <a
               role="button"
               href="{% url 'payment_selection' %}"
-              class="btn btn-success btn-lg fw-bold w-100"
+              class="btn btn-success btn-lg fw-bold w-100 disabled"
               type="button"
-              >Proceed to payment</a
+              >Pay now</a
               >               
           </div>
           
               
     </div>
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Confirm your details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+              <div class="card mb-3 border-1 rounded product-item me-md-4" data-index="{{option.id}}">
+        <div class="row g-0">
+          <div class="col">
+            <div class="card pb-3 rounded-0">
+              <div class="card-header bg-white small text-muted">
+                Shipping to
+                &nbsp;
+              </div>
+                {% for address in addresses  %}
+                    <div class="card-body small pb-1">
+                    <p class="card-text m-0 "><span class="font-weight-bold text-muted">{{address.full_name}} </span> <br>
+                    {{address.address_line}}, {{address.address_line2}}, {{address.city}}, {{address.zipcode}}
+                    <br> Phone: {{address.phone}}</p>
+                    <p class="card-text m-0"></p>
+                    <p class="card-text m-0"></p>
+                    <p class="card-text m-0"></p>
+                    <p class="card-text m-0"></p>
+                    <div class="pt-3">
+                    </div>
+                  </div>
+                {% endfor %}
+            </div>
+                <div class="card-header bg-white text-muted">
+                To Pay: <strong>&#x20b1; {{basket.get_total_price}}</strong>
+                  
 
+                &nbsp;
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <a type="button" class="btn btn-primary" href="{% url 'cash_on_delivery' %}">Confirm Order</a>
+      </div>
+    </div>
+  </div>
+</div>
   </div>
 </div>
 <script

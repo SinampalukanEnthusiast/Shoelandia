@@ -102,7 +102,7 @@
                 {{basket.get_subtotal}}</h4></div>
           </div>
           <div class="row pt-5 pb-5">
-                 <a role="button" href="{% url 'delivery_address' %}" class="btn btn-success fw-bold w-100">Proceed to payment</a>
+                 <a role="button" href="{% url 'delivery_address' %}" class="btn btn-success fw-bold w-100">Continue</a>
           </div>
           
               
@@ -125,7 +125,7 @@
       success: function (json) {
         console.log(json)
         document.getElementById("total").innerHTML = json.total;
-        document.getElementById("delivery_price").innerHTML =
+        document.getElementById("shippingfee").innerHTML =
           json.delivery_price;
       },
       error: function (xhr, errmsg, err) {},

@@ -3,10 +3,13 @@
 <div class="container-fluid">
   <div class="mx-auto col-lg-8">
     <div class="container" style="max-width: 1000px">
-      <div class="col-12">
-        <h1 class="display-4">Addresses</h1>
-        <hr />
-      </div>
+  <div class="container d-flex justify-content-between ">
+    <h1 class="display-4 ">Addresses</h1>
+    <h5 class="text-muted mt-auto">
+      <small><a href="{% url 'dashboard' %}">Go back</a></small>
+    </h5>
+  </div>
+  <hr>
       {% if addresses %} {% for address in addresses %}
 
       <div class="my-3 bg-white rounded box-shadow">
