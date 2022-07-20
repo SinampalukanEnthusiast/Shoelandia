@@ -4,12 +4,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 SECRET_KEY = 'u2ns=a*93ax9f%$t%irgr_1!u!o+f!4(wv_oz5s#^49$p$@lfa'
 
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['https://shoelandia.herokuapp.com/', '127.0.0.1']
+ALLOWED_HOSTS = ['shoelandia.herokuapp.com', '127.0.0.1']
 
 
-CSRF_TRUSTED_ORIGINS = ['https://shoelandia.herokuapp.com/', ]
+CSRF_TRUSTED_ORIGINS = [
+    'https://shoelandia.herokuapp.com', 'http://127.0.0.1']
 
 
 INSTALLED_APPS = [
@@ -20,7 +21,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.postgres',
     'store',
     'crispy_forms',
     'basket',
@@ -28,7 +28,6 @@ INSTALLED_APPS = [
     'orders',
     'checkout',
     'storages',
-
 ]
 
 MIDDLEWARE = [

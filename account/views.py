@@ -106,6 +106,7 @@ def account_register(request):
             user.set_password(registerForm.cleaned_data['password'])
             user.is_active = True
             user.save()
+            messages.success(request, "Account registered!")
             return redirect('dashboard')
     else:
         registerForm = RegistrationForm()
