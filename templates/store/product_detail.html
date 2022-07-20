@@ -1,11 +1,10 @@
 {% extends "store/main.html" %} {% load static %} {% block content %}
 
 <div class="container-fluid">
-  <div class="col d-flex">
-    <div class="col-lg-2"></div>
-    <div class="row">
-      <div class="col">
-        <div class="container-fluid pb-5">
+  <div class="row">
+      <div class="col-lg-2"></div>
+      <div class="col-lg-5">
+        <div class="container pb-5">
           <!-- inthihs -->
 
           <img
@@ -13,12 +12,12 @@
             data-src="holder.js/100px260/"
             alt="100%x260"
             style="max-width: 40rem; min-height: 40rem; width: auto"
-            src="{% if image is None %} /static/images/placeholder-500x500.png{% else %}{{image.image.url}}{% endif %}"
+            src="{% if image is None %} {% static 'images/placeholder-500x500.png' %}{% else %}{{image.image.url}}{% endif %}"
             data-holder-rendered="true"
           />
         </div>
       </div>
-      <div class="col-lg-6">
+      <div class="col-lg-4">
         <div class="">
           <div class="card-body p-0">
             <h1 class="font-weight-normal">{{product.title}}</h1>
@@ -103,6 +102,28 @@
           <hr />
         </div>
 
+
+      </div>
+    </div>
+</div>
+<div class="container-fluid pb-5">
+  <hr />
+  <h1 class="display-4">Related Items</h1>
+  <div class="">
+    {% for related in related_items  %}
+        <a href="{% url 'product_detail' related.subproduct__product__slug %}">
+            <img
+            class="rounded m-2 "
+            data-src="holder.js/100px260/"
+            alt="100%x260"
+            style="max-width: 20rem; min-height: 20rem; width: auto"
+            src="{% if image is None %}{% static 'images/placeholder-500x500.png' %}{% else %}https://shoelandia.s3.amazonaws.com/media/{{related.subproduct__product_image__image}}{% endif %}"
+            data-holder-rendered="true"/>
+            
+        </a>
+        {% endfor %}
+        
+</div>
         <script>
           var d = {};
           let textBoxes = document.querySelectorAll("[id^=target]");
@@ -167,27 +188,4 @@
             });
           });
         </script>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="container-fluid pb-5">
-  <hr />
-  <h1 class="display-4">Related Items</h1>
-  <div class="">
-    {% for related in related_items  %}
-        <a href="{% url 'product_detail' related.subproduct__product__slug %}">
-            <img
-            class="rounded m-2 "
-            data-src="holder.js/100px260/"
-            alt="100%x260"
-            style="max-width: 20rem; min-height: 20rem; width: auto"
-            src="{% if image is None %}../../static/images/placeholder-500x500.png{% else %}../../static/images/{{related.subproduct__product_image__image}}{% endif %}"
-            data-holder-rendered="true"/>
-            
-        </a>
-        {% endfor %}
-        
-</div>
-
 {% endblock content %}

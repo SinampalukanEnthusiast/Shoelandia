@@ -6,12 +6,10 @@ SECRET_KEY = 'u2ns=a*93ax9f%$t%irgr_1!u!o+f!4(wv_oz5s#^49$p$@lfa'
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['venture-cars-1-heroku.herokuapp.com',
-                 'venture-cars-2.herokuapp.com', '127.0.0.1']
+ALLOWED_HOSTS = ['https://shoelandia.herokuapp.com/', '127.0.0.1']
 
 
-CSRF_TRUSTED_ORIGINS = ['https://venture-cars-1-heroku.herokuapp.com',
-                        'https://venture-cars-2.herokuapp.com']
+CSRF_TRUSTED_ORIGINS = ['https://shoelandia.herokuapp.com/', ]
 
 
 INSTALLED_APPS = [
@@ -29,7 +27,7 @@ INSTALLED_APPS = [
     'account',
     'orders',
     'checkout',
-    # 'storages', # uncomment when deploying
+    'storages',
 
 ]
 
@@ -67,12 +65,8 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
 DATABASES = {
     'default': {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "postgres",
-        "USER": "postgres",
-        "PASSWORD": "postgres",
-        "HOST": "127.0.0.1",
-        "PORT": "5432",
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 

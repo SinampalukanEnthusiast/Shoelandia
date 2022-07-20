@@ -4,7 +4,7 @@
   <div class="container d-flex justify-content-between ">
     <h1 class="display-4 ">Orders </h1>
     <h5 class="text-muted mt-auto">
-      <small><a href="{% url 'orders' %}">Go back</a></small>
+      <small><a href="{% url 'dashboard' %}">Go back</a></small>
     </h5>
   </div>
     <hr>
@@ -24,7 +24,7 @@
               Reference ID: {{order.order_key}} <br />
 
               {{order.address1}} {{order.address2}}, <br />
-              {{order.city}}, {{order.country_code}}, {{order.zipcode}} <br />
+              {{order.city}}, {{order.province}}, {{order.country_code}}, {{order.zipcode}} <br />
               {{order.phone}}
             </p>
           </div>

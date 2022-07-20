@@ -164,7 +164,7 @@ class ProductImage(models.Model):
         verbose_name="image",
         help_text="Upload a product image",
         upload_to="",
-        default="images/default.png",
+        default="images/placeholder-500x500.png",
     )
     alt_text = models.CharField(
         verbose_name="Alterrnative text",

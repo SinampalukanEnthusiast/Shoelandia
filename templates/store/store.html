@@ -70,15 +70,26 @@
         <!-- thsi is a comment -->
         {% for images in sub.product_image.all %}
         <!-- thsi is a comment -->
-        {% if images.is_feature %}
-
+        
         <div class="col pl-3">
           <div class="container-fluid ">
+            {% if images.is_feature %}
               <a
                 href="{% url 'product_detail' product.slug %}"
               >            
             <img
-              src="{{images.image.url}}"
+              src="{{images.image.url}}" 
+              class=""
+              style="max-width: 25rem; min-height: 25rem; width: auto"
+              alt="..."
+            />
+            </a>
+          {% else %}
+            <a
+                href="{% url 'product_detail' product.slug %}"
+              >            
+            <img
+              src="{% static 'images/placeholder-500x500.png' %}" 
               class=""
               style="max-width: 25rem; min-height: 25rem; width: auto"
               alt="..."

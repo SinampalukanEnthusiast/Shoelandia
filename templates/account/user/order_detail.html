@@ -23,7 +23,7 @@
               {% if image.sub_product__product__title == order.items__product__title %}
                 <div class="pb-2 ">
                   <img
-                    src=" /static/images/{{image.image}}"
+                    src="https://shoelandia.s3.amazonaws.com/media/{{image.image}}"
                     alt="..."
                     style="aspect-ratio: 1/1;"
                     class="img-thumbnail"
@@ -66,7 +66,7 @@
                               &#x20b1;{{order.items__price}} | Qty:
                               {{order.items__quantity}}
                               <br />{{order.address1}}, {{order.address2}},
-                              {{order.city}}, {{order.postal_code}}
+                              {{order.city}}, {{order.province}}, {{order.postal_code}}
                               <br />
                               {{order.phone}} <br /><br />
                               <span class="text-muted"

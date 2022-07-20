@@ -17,7 +17,6 @@ def home(request):
 def store(request):
     category_query = request.GET.getlist('category')
     search_query = request.GET.get('search')
-    print(f'search query: {search_query}')
 
     if category_query:
         category_selected = Category.objects.filter(
@@ -30,7 +29,7 @@ def store(request):
 
     elif search_query:
         products = Product.objects.filter(
-            Q(description__search=search_query) | Q(title__search=search_query))
+            Q(description__icontains=search_query) | Q(title__icontains=search_query))
         category_selected = None
         if not products:
             messages.success(
@@ -41,8 +40,6 @@ def store(request):
         search_query = None
 
     category_data = Category.objects.filter().values('name', 'slug', )
-    print(f'category : {category_selected}')
-    print(f'products data : {products}')
 
     context = {'products': products, 'category_selected': category_selected,
                'category_data': category_data, }

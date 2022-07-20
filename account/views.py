@@ -53,7 +53,7 @@ def orders(request):
 
 def order_detail(request, id):
     orders = Order.objects.filter(items__order__id=id).values(
-        'full_name', 'address1', 'address2', 'city', 'phone', 'postal_code', 'total_paid',
+        'full_name', 'address1', 'address2', 'city', 'phone', 'province', 'postal_code', 'total_paid',
         'order_key', 'created',  'billing_status', 'is_delivered', 'is_processing', 'is_returned',
         'items__product__title', 'items__quantity', 'items__price', 'payment_option', 'items__variant', 'items__size', )
 
@@ -78,7 +78,7 @@ def order_detail(request, id):
 def return_order(request, pk):
     order = Order.objects.filter(
         id=pk,)
-    order.update(is_returned=True, is_processing=True)
+    order.update(is_returned=True, is_processing=True, billing_status=False)
     messages.success(
         request, f'We are now processing your returns and refund!')
     return redirect('orders')

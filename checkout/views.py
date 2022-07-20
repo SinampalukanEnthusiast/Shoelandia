@@ -190,6 +190,7 @@ def payment_complete_cod(request):
         address1=address1,
         address2=address2,
         city=city,
+        province=province,
         postal_code=zipcode,
         country_code=country_code,
         phone=phone,
