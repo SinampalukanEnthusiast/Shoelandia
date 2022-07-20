@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  # app:
+  #   build: .
+  #   volumes:
+  #     - .:/django
+  #   ports:
+  #     - 8000:8000
+  #   image: app:django
+  #   container_name: django_container
+  #   command: python manage.py runserver 0.0.0.0:8000
+  #   depends_on:
+  #     - pgdb
+  #     - pgadmin
+
+  pgdb:
+    container_name: pgdb_ecommerce
+    image: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  pgadmin:
+    container_name: pgadmin4
+    image: dpage/pgadmin4
+    restart: always
+
+    environment:
+      PGADMIN_DEFAULT_EMAIL: a@a.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    ports:
+      - "5050:80"
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+volumes:
+  pgdata:

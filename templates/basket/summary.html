@@ -1,0 +1,167 @@
+{% extends 'store/main.html' %} {% load static %} {% block content %}
+
+<div class="container-fluid">
+  <main class="pt-5">
+    <div class="container">
+      <h1 class="h5 display-4">Your basket</h1>
+      <hr class="featurette-divider" />
+      <div class="row">
+        <div class="col-md-6">
+          <h1 class="font-weight-light">Order</h4>
+            <br>
+           
+          {% if basket %}
+            {% for item in basket %} {% with product=item.product %}
+            <div class="d-inline-flex row">
+
+              <!-- potential sorespot, should be fixed -->
+                <img
+                src="https://shoelandia.s3.amazonaws.com/media/{{item.image}}"
+                alt="productholder"
+                class="img-thumbnail rounded"
+                style="max-width: 10rem; min-height: 10rem; width: auto"
+              />
+
+              <div class="col">
+                <h4 class="text-left font-weight-light">
+                  {{product.title}}, {{item.size}}, variant: {{item.variant}}
+                  
+                </h4>
+                <h5 class="text-left font-weight-light">
+                  &#x20b1; {{product.regular_price}} 
+                </h5> 
+    
+
+                <div class="col-12">
+                  <label for="select" class="font-weight-light mr-2 ">Qty</label>
+                  <select id="select{{product.id}}">
+                    <option selected>{{item.qty}}</option>
+                    <option value="">1</option>
+                    <option value="">2</option>
+                    <option value="">3</option>
+                    <option value="">4</option>
+                  </select>
+                  <button
+                    type="button"
+                    id="update-button"
+                    data-index="{{product.id}}"
+                    class="btn btn-outline-secondary btn-sm update-button"
+                  >
+                    Update
+                  </button>
+                  <button
+                    type="button"
+                    id="delete-button"
+                    data-index="{{product.id}}"
+                    class="btn btn-outline-secondary btn-sm delete-button"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+            {% endwith %} {% endfor %}
+          {% else %}
+           <h5 class="font-weight-light pb-5">You have no items in your basket. Click <a href="{% url 'store' %}">here</a> to start shopping.</h5>
+          {% endif %}
+        </div>
+
+        <div class="col-md-6">
+          <h1 class="font-weight-light">Summary</h1>
+          <div class="row">
+            <div class="col">
+               <h4 class="col font-weight-light d-inline">
+                          Sub Total:
+               </h4>
+            </div>
+            <h4 class="font-weight-bold">&#x20b1;</h4>
+            <div class="col"><h4 class="col font-weight-bold" id="subtotal">
+                           {{ basket.get_subtotal }} </h4></div>
+          </div>
+          <div class="row">
+            <div class="col">
+                 <h4 class="col font-weight-light d-inline">
+                  Shipping Fee:
+                 </h4>
+            </div>
+            <h4 class="font-weight-bold">&#x20b1;</h4>
+
+            <div class="col"><h5 class="col font-weight-bold " id="shippingfee">
+                          Applied on checkout </h5></div>
+          </div>
+          <hr class="featurette-divider">
+
+          <div class="row">
+            <div class="col">
+              <h4 class="col font-weight-light d-inline">
+                Total:
+               </h4>
+            </div>
+            <h4 class="font-weight-bold">&#x20b1;</h4>
+
+            <div class="col"><h4 class="col font-weight-bold" id="total">
+                {{basket.get_subtotal}}</h4></div>
+          </div>
+          <div class="row pt-5 pb-5">
+           <a href="{% url 'deliverychoices' %}" class="btn btn-success btn-block">Checkout</a> 
+          </div>
+          
+              
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  // Delete Item
+  $(document).on("click", ".delete-button", function (e) {
+    var prodid = $(this).data("index");
+    $.ajax({
+      type: "POST",
+      url: "{% url 'basket_delete' %}",
+      data: {
+        product_id: $(this).data("index"),
+        csrfmiddlewaretoken: "{{csrf_token}}",
+        action: "POST",
+      },
+      
+      success: function (json) {
+        console.log(json);
+        $('.product-item[data-index="' + prodid + '"]').remove();
+        document.getElementById("subtotal").innerHTML = json.subtotal;
+        document.getElementById("total").innerHTML = json.subtotal;
+        document.getElementById("basket-qty").innerHTML = json.qty;
+        window.location.reload();
+      },
+      error: function (xhr, errmsg, err) {},
+    });
+  });
+
+  // Update Item
+  $(document).on("click", ".update-button", function (e) {
+    e.preventDefault();
+    var prodid = $(this).data("index");
+    $.ajax({
+      type: "POST",
+      url: "{% url 'basket_update' %}",
+      data: {
+        product_id: $(this).data("index"),
+        product_qty: $("#select" + prodid + " option:selected").text(),
+        csrfmiddlewaretoken: "{{csrf_token}}",
+        action: "POST",
+      },
+      success: function (json) {
+        document.getElementById("basket-qty").innerHTML = json.qty;
+        console.log(json);
+        document.getElementById("subtotal").innerHTML = json.subtotal;
+          document.getElementById("total").innerHTML = json.subtotal;
+        console.log(json.subtotal);
+
+      },
+      error: function (xhr, errmsg, err) {},
+    });
+  });
+</script>
+{% endblock content %}

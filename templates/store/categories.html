@@ -1,0 +1,57 @@
+{% extends "store/main.html" %} {% block content %}
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home</title>
+</head>
+<body>
+  <header class="display-3"><strong>Home file</strong></header>
+  <br />
+  <div class="row">
+    <div class="col">
+      <h1 class="font-weight-light">Category data</h1>
+      {% for data in category_data %}
+      <ul>
+        <li>
+          <h3>
+            <a href="{% url 'category_products' category=data.slug %}"
+              >{{data}}</a
+            >
+          </h3>
+        </li>
+      </ul>
+
+      {% endfor %}
+    </div>
+
+    <div class="col">
+      <h1 class="font-weight-light">Product data</h1>
+
+      {% for product in products_data %}
+      <strong> Product title:</strong> {{product.title}}
+      <br />
+      {% for sub in product.subproduct_set.all %} Associated subproducts:
+      {{sub.sub_name}} <br />
+      Associated sizes: {{sub.productsizes_set.all}} <br />
+      Associated color: {{sub.productcolor}} <br />
+      Associated image: {{sub.product_image.all}} <br />
+      {% if sub.is_default %} Flagship: {{sub.sub_name}} <br />
+      {% for image in sub.product_image.all %} {% if image.is_feature %}
+      {{image.image.url}} {% endif %} {% endfor %} {% endif %}
+
+      <br /><br />
+      {% endfor %} {% endfor %}
+      <br />
+      <hr />
+      <h3 class="font-weight-light">Sub Product</h3>
+      {% for sub in sub_product %} Product: {{sub.product}} {{sub.sub_name}}
+      <hr />
+
+      {% endfor %}
+    </div>
+  </div>
+</body>
+
+{% endblock content %}

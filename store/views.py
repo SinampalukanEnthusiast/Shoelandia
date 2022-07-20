@@ -1,189 +1,108 @@
-from itertools import product
-from multiprocessing import context
-from django.shortcuts import get_object_or_404, redirect, render
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-import json
-import datetime
-
-from store.forms import *
-
+from django.shortcuts import get_object_or_404, render
 from .models import *
-from .utils import cookie_cart, cart_data, guest_order
-
-from django.contrib.auth import authenticate, login, logout
+from django.db.models import Count
+from django.db.models import Q
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 
 
-@login_required(login_url='login')
 def home(request):
-    data = cart_data(request)
-    cartItems = data['cartItems']
-    context = {'cartItems': cartItems}
+    category_data = Category.objects.all()
+    products_data = Product.objects.all()
+    sub_product = SubProduct.objects.filter().values('sub_name', 'product')
+    context = {'category_data': category_data,
+               "products_data": products_data, "sub_product": sub_product}
     return render(request, 'store/home.html', context)
 
 
-def register(request):
-    if request.user.is_authenticated:
-        return redirect('home')
-    else:
-        form = RegisterUser()
-        if request.method == 'POST':
-            form = RegisterUser(request.POST)
-            if form.is_valid():
-                form.save()
-                customer_username = form.cleaned_data['username']
-                customer_name = f"{form.cleaned_data['first_name']} {form.cleaned_data['last_name']}"
-                email = form.cleaned_data['email']
-                user = User.objects.get(username=customer_username)
-                customer = Customer.objects.create(
-                    name=customer_name, email=email)
-                customer.user = user
-                customer.save()
-                messages.success(request, "Account created!")
-                return redirect('login')
-        context = {'form': form}
-        return render(request, 'store/register.html', context)
-
-
-def loginUser(request):
-    if request.user.is_authenticated:
-        return redirect('home')
-    else:
-        if request.method == 'POST':
-            username = request.POST.get('username')
-            password = request.POST.get('password')
-            user = authenticate(request, username=username, password=password)
-            if user is not None:
-                login(request, user)
-                messages.success(request, "Account logged in!")
-                return redirect('home')
-            else:
-                messages.info(request, 'Username or password is incorrect!')
-        context = {'form': LoginForm()}
-        return render(request, 'store/login.html', context)
-
-
-def logoutUser(request):
-    logout(request)
-    return redirect('login')
-
-
-@login_required(login_url='login')
 def store(request):
+    category_query = request.GET.getlist('category')
+    search_query = request.GET.get('search')
 
-    data = cart_data(request)
-    cartItems = data['cartItems']
+    if category_query:
+        category_selected = Category.objects.filter(
+            product__category__slug__in=category_query).values('slug')
+        products = Product.objects.filter(
+            category__slug__in=category_query)
+        search_query = None
+        if not products:
+            messages.success(request, "No matching product found")
 
-    products = Product.objects.all()
-    context = {'products': products, 'cartItems': cartItems}
+    elif search_query:
+        products = Product.objects.filter(
+            Q(description__icontains=search_query) | Q(title__icontains=search_query))
+        category_selected = None
+        if not products:
+            messages.success(
+                request, f'No matching product found for "{search_query}"')
+    else:
+        products = Product.objects.all()
+        category_selected = None
+        search_query = None
+
+    category_data = Category.objects.filter().values('name', 'slug', )
+
+    context = {'products': products, 'category_selected': category_selected,
+               'category_data': category_data, }
     return render(request, 'store/store.html', context)
 
 
-@login_required(login_url='login')
-def cart(request):
-
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(
-            customer=customer, complete=False)
-        # .orderitem_set.all() is sort of a reverse lookup that grabs all the orderitem classes associated
-        # to this particular Order class referenced above.
-        items = order.orderitem_set.all()
-        cartItems = order.get_cart_items
-    else:
-        cookieData = cookie_cart(request)
-        items = cookieData['items']
-        order = cookieData['order']
-        cartItems = cookieData['cartItems']
-
-    context = {'items': items, 'order': order, 'cartItems': cartItems}
-
-    return render(request, 'store/cart.html', context)
-
-
-@login_required(login_url='login')
-def checkout(request):
-
-    data = cart_data(request)
-    items = data['items']
-    order = data['order']
-    cartItems = data['cartItems']
-
-    context = {'items': items, 'order': order, 'cartItems': cartItems}
-    return render(request, 'store/checkout.html', context)
-
-
-@login_required(login_url='login')
-def update_item(request):
-    data = json.loads(request.body)
-    productId = data['productId']
-    action = data['action']
-    print(' ')
-    print('Action: ', action)
-    print('ProductId: ', productId)
-
-    customer = request.user.customer
-    # These are loaded from models.py
-    product = Product.objects.get(id=productId)
-    order, created = Order.objects.get_or_create(
-        customer=customer, complete=False)
-    orderItem, created = OrderItem.objects.get_or_create(
-        order=order, product=product)
-
-    if action == 'add':
-        orderItem.quantity = (orderItem.quantity + 1)
-    elif action == 'remove':
-        orderItem.quantity = (orderItem.quantity - 1)
-
-    orderItem.save()
-
-    if orderItem.quantity <= 0:
-        orderItem.delete()
-
-    return JsonResponse('Item was added', safe=False)
-
-
-@login_required(login_url='login')
-@csrf_exempt  # there is a video on a potential better solution to this
-def process_order(request):
-    transaction_id = datetime.datetime.now().timestamp()
-    print('request body: ', request.body)
-    data = json.loads(request.body)
-
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(
-            customer=customer, complete=False)
-
-    else:
-        customer, order = guest_order(request, data)
-
-    total = float(data['form']['total'])
-    order.transaction_id = transaction_id
-
-    if total == order.get_cart_total:
-        order.complete = True
-    order.save()
-
-    if order.shipping == True:
-        ShippingAddress.objects.create(
-            customer=customer,
-            order=order,
-            address=data['shipping']['address'],
-            city=data['shipping']['city'],
-            state=data['shipping']['state'],
-            zipcode=data['shipping']['zipcode']
-        )
-
-    return JsonResponse('Payment complete!', safe=False)
-
-
 def product_detail(request, slug):
-    data = cart_data(request)
-    product = get_object_or_404(Product, slug=slug)
-    cartItems = data['cartItems']
+    """Reverse searches variants, images, sizes from product object.
+    """
+    color_get = []
+    sizes = []
+    if request.GET:
+        for value in request.GET.values():
+            color_get.append(value)
 
-    context = {'product': product, 'cartItems': cartItems}
+    color_selected = None
+    product = get_object_or_404(Product, slug=slug)
+    colors = SubProduct.objects.filter(
+        product__slug=slug).values('sub_name', 'productcolor__color',  'is_default', 'product__category__name')
+    product_category = colors[0]['product__category__name']
+    if color_get:
+        color_selected = SubProduct.objects.filter(
+            product__slug=slug).filter(productcolor__color__in=color_get).values('sub_name',).annotate(is_selected=Count('sub_name'))
+        sizes = ProductSizes.objects.filter(
+            sub_product__sub_name=color_selected[0]['sub_name']).filter(sub_product__productcolor__color__in=color_get).values('size', 'stock_amount', 'sub_product__sub_name')
+    else:
+        choices = ProductSizes.SIZE_CHOICES
+        for size in choices:
+            sizes.append({'size': size[0]})
+
+    try:
+        total_stock = 0
+        for stock in sizes:
+            total_stock += stock['stock_amount']
+    except:
+        total_stock = 0
+
+    stock = []
+    try:
+        if color_get:
+            image = ProductImage.objects.get(
+                sub_product__productcolor__color=color_get[0], sub_product__product__slug=slug, )
+        else:
+            image = ProductImage.objects.get(
+                sub_product__product__slug=slug, sub_product__is_default=True, is_feature=True)
+    except:
+        image = None
+
+    related_items = Product.objects.filter(
+        category__name=product_category).filter(subproduct__is_default=True).values("subproduct__product__slug", "subproduct__product_image__image")
+
+    if color_get:
+        context = {'product': product, 'image': image,
+                   'sizes': sizes, 'stock': total_stock, 'colors': colors, 'color_selected': color_selected, 'variant': color_get[0], 'related_items': related_items}
+    else:
+
+        context = {'product': product, 'image': image,
+                   'sizes': sizes, 'stock': total_stock, 'colors': colors, 'color_selected': color_selected, 'related_items': related_items}
     return render(request, 'store/product_detail.html', context)
+
+
+def category_products(request, category):
+    data = Product.objects.filter(
+        category__slug=category).values('title', 'slug')
+    context = {"data": data}
+    return render(request, 'store/category_products.html', context)

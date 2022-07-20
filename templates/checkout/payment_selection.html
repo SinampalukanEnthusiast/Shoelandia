@@ -1,0 +1,184 @@
+{% extends "store/main.html" %} {% load static %}
+<!-- this is a comment -->
+{% block content %}
+<div class="container">
+  <div class="col-12">
+    <h1 class="display-4">Payment Options</h1>
+  </div>
+
+  <hr />
+</div>
+
+<div class="container">
+  <div class="row g-3">
+      <div class="col-md-6 col-lg-6 pe-0 pe-md-5">
+        <div id="paypal-button-container" class="pb-2"></div>
+        <hr>
+        <div class="pt-2">
+        <a href="#" class="btn btn-info btn-lg btn-block w-100 h-100 my-3 " data-toggle="modal" data-target="#exampleModalCenter">Pay with Cash on Delivery</a>
+        </div>
+      </div>
+    <div class="col-md-6">
+          <h1 class="font-weight-light">Summary</h1>
+          <div class="row">
+            <div class="col">
+               <h4 class="col font-weight-light d-inline">
+                          Sub Total:
+               </h4>
+            </div>
+            <h4 class="font-weight-bold">&#x20b1;</h4>
+            <div class="col"><h4 class="col font-weight-bold" id="subtotal">
+                           {{ basket.get_subtotal }} </h4></div>
+          </div>
+          <div class="row">
+            <div class="col">
+                 <h4 class="col font-weight-light d-inline">
+                  Shipping Fee:
+                 </h4>
+            </div>
+            <h4 class="font-weight-bold">&#x20b1;</h4>
+
+            <div class="col"><h4 class="col font-weight-bold " id="shippingfee">
+                          {{basket.get_delivery_price}} </h4></div>
+          </div>
+          <hr class="featurette-divider">
+
+          <div class="row">
+            <div class="col">
+              <h4 class="col font-weight-light d-inline">
+                Total:
+               </h4>
+            </div>
+            <h4 class="font-weight-bold">&#x20b1;</h4>
+
+            <div class="col"><h4 class="col font-weight-bold" id="total">
+                {{basket.get_total_price}}</h4></div>
+          </div>
+          <div class="row pt-5 pb-5">
+              <a
+              role="button"
+              href="{% url 'payment_selection' %}"
+              class="btn btn-success btn-lg fw-bold w-100 disabled"
+              type="button"
+              >Pay now</a
+              >               
+          </div>
+          
+              
+    </div>
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Confirm your details</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+              <div class="card mb-3 border-1 rounded product-item me-md-4" data-index="{{option.id}}">
+        <div class="row g-0">
+          <div class="col">
+            <div class="card pb-3 rounded-0">
+              <div class="card-header bg-white small text-muted">
+                Shipping to
+                &nbsp;
+              </div>
+                {% for address in addresses  %}
+                    <div class="card-body small pb-1">
+                    <p class="card-text m-0 "><span class="font-weight-bold text-muted">{{address.full_name}} </span> <br>
+                    {{address.address_line}}, {{address.address_line2}}, {{address.city}}, {{address.zipcode}}
+                    <br> Phone: {{address.phone}}</p>
+                    <p class="card-text m-0"></p>
+                    <p class="card-text m-0"></p>
+                    <p class="card-text m-0"></p>
+                    <p class="card-text m-0"></p>
+                    <div class="pt-3">
+                    </div>
+                  </div>
+                {% endfor %}
+            </div>
+                <div class="card-header bg-white text-muted">
+                To Pay: <strong>&#x20b1; {{basket.get_total_price}}</strong>
+                  
+
+                &nbsp;
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <a type="button" class="btn btn-primary" href="{% url 'cash_on_delivery' %}">Confirm Order</a>
+      </div>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
+<script
+  src="https://www.paypal.com/sdk/js?client-id=AW7bpDXRG0vUery0Yan8G2qQFDMpJBvywUA1Iav9O-p4hQK4B9WQDQc-xiE9MbbM5ch4-kH-mbgbCNur&currency=PHP"
+  data-sdk-integration-source="button-factory"
+></script>
+<script>
+  function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      var cookies = document.cookie.split(";");
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === name + "=") {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+  var csrftoken = getCookie("csrftoken");
+
+  function initPayPalButton() {
+    paypal
+      .Buttons({
+        style: {
+          shape: "rect",
+          color: "gold",
+          layout: "vertical",
+          label: "paypal",
+        },
+        createOrder: function (data, actions) {
+          return actions.order.create({
+            purchase_units: [
+              {
+                amount: {
+                  currency_code: "PHP",
+                  value: "{{basket.get_total_price}}",
+                },
+              },
+            ],
+          });
+        },
+        onApprove: function (data) {
+          var url = "{% url 'payment_complete' %}";
+          return fetch(url, {
+            method: "POST",
+            headers: {
+              "content-type": "application/json",
+              "X-CSRFToken": csrftoken,
+            },
+            body: JSON.stringify({
+              orderID: data.orderID,
+            }),
+          }).then(function () {
+            location.href = "{% url 'payment_successful' %}";
+          });
+        },
+      })
+      .render("#paypal-button-container");
+  }
+  initPayPalButton();
+</script>
+
+{% endblock %}

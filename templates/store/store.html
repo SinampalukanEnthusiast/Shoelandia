@@ -1,0 +1,174 @@
+{% extends 'store/main.html' %} {% load static %} {% block content %}
+
+<!-- this is a comment -->
+{% block title %}
+<title>Store</title>
+{% endblock title %}
+
+<div class="container-fluid ">
+  <div class="col d-flex justify-content-center">
+    <div class="col-lg-2 col-md-4 col-sm-3 d-none d-sm-block d-md-block">
+      <h4>Filter</h4> 
+      <hr />
+      
+      <div id="accordion">
+        <div class="card" id="category-menu">
+          <div class="card-header" id="headingOne">
+            <h5 class="mb-0">
+              <button
+                class="btn btn-link"
+                data-toggle="collapse"
+                data-target="#collapseOne"
+                aria-expanded="true"
+                aria-controls="collapseOne"
+              >
+                Categories
+              </button>
+            </h5>
+          </div>
+
+          <div
+            id="collapseOne"
+            class="collapse "
+            aria-labelledby="headingOne"
+            data-parent="#accordion"
+          >
+            <div class="card-body">
+              {% for category in category_data %}
+
+              <div class="container font-weight-light list-group-item">
+                <input type="checkbox" id="target-{{category.slug}}"
+                value="{{category.slug}}" data-attribute="category" 
+                {% for option in category_selected %} 
+                {% if option.slug == category.slug %} 
+                checked
+                {% endif %} 
+                {% endfor %} />
+                {{category.name}}
+              </div>
+              {% endfor %}
+              <div class="container p-2">
+                <button type="button" class="btn btn-block btn-outline-secondary " id="category-apply">
+                  Apply
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="col-lg-10 d-flex">
+      <div class="row no-gutters">
+        <!-- by issus this code is mad ugly -->
+        {% if products %} {% for product in products %}
+        <!-- thsi is a comment -->
+        {% for sub in product.subproduct_set.all %}
+        <!-- thsi is a comment -->
+        {% if sub.is_default %}
+        <!-- thsi is a comment -->
+        {% for images in sub.product_image.all %}
+        <!-- thsi is a comment -->
+        
+        <div class="col pl-3">
+          <div class="container-fluid ">
+            {% if images.is_feature %}
+              <a
+                href="{% url 'product_detail' product.slug %}"
+              >            
+            <img
+              src="{{images.image.url}}" 
+              class=""
+              style="width: 25rem; height: 25rem; "
+              alt="..."
+            />
+            </a>
+          {% else %}
+            <a
+                href="{% url 'product_detail' product.slug %}"
+              >            
+            <img
+              src="{% static 'images/placeholder-500x500.png' %}" 
+              class=""
+              style="max-width: 25rem; min-height: 25rem; width: auto"
+              alt="..."
+            />
+            </a>
+            {% endif %}
+            <!-- this is a cometn -->
+            {% endfor %} {% endif %}
+            <!-- this is a cometn -->
+            {% endfor %}
+            
+
+            <div class="card-body p-0">
+              <h5 class="card-title font-weight-light">
+                {{product.title}}
+                <br />
+                &#x20b1;{{product.regular_price|floatformat:2}}
+              </h5>
+            </div>
+          </div>
+        </div>
+
+        {% endfor %} {% else %}
+        <div
+          class="container border d-flex justify-content-center align-items-center"
+          style="min-height: 100%; max-width: 100%"
+        >
+          <h1 class="h4">No products found.</h1>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // dict object structure should be {category: [value1, value2, ...]}
+  var d = { category: [] };
+  let textBoxes = document.querySelectorAll("[id^=target]");
+  console.log(textBoxes);
+  let e = 0;
+  let f = textBoxes.length;
+  let picked = "";
+
+  let querystring = "";
+  document.getElementById("category-apply").addEventListener(
+    "click",
+    function (e) {
+      for (let i = 0; i < f; i++) {
+        if (textBoxes[i].checked) {
+          d[textBoxes[i].getAttribute("data-attribute")].push(
+            textBoxes[i].getAttribute("value")
+          );
+          console.log(d);
+        } else {
+          console.log("not checked");
+        }
+      }
+      let value = e.target.getAttribute("value");
+      d[e.target.getAttribute("data-attribute")] =
+        e.target.getAttribute("value");
+      picked = value;
+
+      querystring = buildUrlWithParams(d);
+      let url = window.location.href.split("?")[0];
+      window.location.href = url + "?" + querystring;
+    },
+    false
+  );
+
+  function buildUrlWithParams(data) {
+    // for each value in category, build a "category={value}" + "&" url
+    var searchparams = [];
+    for (var d in data) {
+      for (var i in data[d]) {
+        searchparams.push(d + "=" + data[d][i]);
+      }
+      return searchparams.join("&");
+    }
+  }
+</script>
+{% endblock content %}

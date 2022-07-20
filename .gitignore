@@ -2,9 +2,12 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+.prettierignore
 # C extensions
 *.so
+
+#docker-compose
+.docker-compose.yml
 
 # Distribution / packaging
 .Python

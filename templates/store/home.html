@@ -1,0 +1,214 @@
+{% extends "store/main.html" %} {% load static %} {% block content %}
+<div class="container-fluid">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico" />
+
+    {% block title %}
+    <title>Shoelandia</title>
+    {% endblock title %}
+
+    <link
+      rel="canonical"
+      href="https://getbootstrap.com/docs/4.0/examples/carousel/"
+    />
+
+    <!-- Bootstrap core CSS -->
+
+    <!-- Custom styles for this template -->
+  </head>
+  <body>
+    <main role="main">
+      <div id="myCarousel" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators">
+          <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+          <li data-target="#myCarousel" data-slide-to="1"></li>
+          <li data-target="#myCarousel" data-slide-to="2"></li>
+        </ol>
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img
+              class="first-slide img-fluid my-fit"
+              src="{% static 'images/bgkid.jpg' %}" 
+              alt="First slide"
+            />
+            <div class="container">
+              <div class="carousel-caption my-left text-left">
+                <h1 class="text-white display-4">Shoelandia</h1>
+                <p>The shoe-land for all your kiddie needs!</p>
+                <p>
+                  <a
+                    class="btn btn-lg btn-primary"
+                    href="{% url 'store' %}"
+                    role="button"
+                    >Shop now!</a
+                  >
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <img
+              class="second-slide img-fluid my-fit"
+              src="{% static 'images/toddlers.jpg' %}"
+              alt="Second slide"
+            />
+            <div class="container">
+              <div class="carousel-caption">
+                <h1 class="text-white display-4">The best shoe land in town!</h1>
+                <p>
+                  Shoelandia is the best place in the internet to buy shoes for kids, toddlers, and babies. 
+                  Our wide selection of popular brands and styles have been curated just for you - 
+                  so that when your little one wears them, you will know it's your little one styling right!
+                </p>
+
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item">
+            <img
+              class="third-slide img-fluid my-fit"
+              src="{% static 'images/playgroundbg1.jpg' %}" 
+              alt="Third slide"
+            />
+            <div class="container">
+              <div class="carousel-caption text-right my-right">
+                <h1 class="text-white display-4">Free vouchers for loyal customers!</h1>
+                <p>
+                  Loyal customers are entitled to many perks in shoelandia, one of which is that they are awarded
+                  vouchers of their choice during sales! 
+                </p>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <a
+          class="carousel-control-prev"
+          href="#myCarousel"
+          role="button"
+          data-slide="prev"
+        >
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a
+          class="carousel-control-next"
+          href="#myCarousel"
+          role="button"
+          data-slide="next"
+        >
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+
+      <!-- Marketing messaging and featurettes
+      ================================================== -->
+      <!-- Wrap the rest of the page in another container to center all the content. -->
+
+      <div class="container marketing">
+        <!-- START THE FEATURETTES -->
+
+        <hr class="featurette-divider" />
+
+        <div class="row featurette">
+          <div class="col-md-7">
+            <h2 class="featurette-heading pt-5">
+              Need a shoe to explore the great outdoors with your young ones?
+              <span class="text-muted">Try out Ocean Blue One!</span>
+            </h2>
+            <p class="lead">
+              What’s the best reason to buy a pair of ocean blue shoes? Well, they are simply gorgeous! They can brighten up any outfit and really stand out. 
+              And who doesn’t love a good pair of shoes that look great with all kinds of clothing? 
+              This color is perfect for both summer and winter outfits- you won’t be able to go wrong with these beauties! 
+              At first, it may seem a little strange to buy a pair of shoes in a different color but trust us, ocean blue shoes are a must-have this summer. 
+            </p>
+          </div>
+          <div class="col-md-5">
+            <a href="/store/ocean-blue-one/">
+            <img
+              class="featurette-image img-fluid mx-auto"
+              src="{% static 'images/outdoor1.jpg' %}"
+              alt="oceanblue"
+            />
+            </a>  
+          </div>
+        </div>
+
+        <hr class="featurette-divider" />
+
+        <div class="row featurette">
+          <div class="col-md-7 order-md-2">
+            <h2 class="featurette-heading">
+              Want something more laid back and chill?.
+              <span class="text-muted">Try these new Nike White Coco X</span>
+            </h2>
+            <p class="lead">
+              White shoes are a perfect choice for kids who want to look good but also be safe. 
+              Shoes in any color can get messy, quickly, and require special care that white shoes don’t. 
+              In fact, if your child wears black or brown shoes around the house (or even outside), 
+              they may be more likely to soil their underwear with food or other objects than when wearing something as easy to clean as white sneakers!
+            </p>
+          </div>
+          <div class="col-md-5 order-md-1">
+            <a href="/store/white-coco-x/">
+            <img
+              class="featurette-image img-fluid mx-auto"
+              src="{% static 'images/clean_white1.jpg' %}"
+              alt="Generic placeholder image"
+            />
+            </a>
+          </div>
+        </div>
+
+        <hr class="featurette-divider" />
+
+        <div class="row featurette">
+          <div class="col-md-7">
+            <h2 class="featurette-heading">
+              Got a young lady finally wanting to explore the world?
+              <span class="text-muted">These Pink Glaze shoes got you covered!</span>
+            </h2>
+            <p class="lead">
+              Today, sport shoes are not just for boys. Girls now have a choice to buy sports shoes in different colors and styles that match their personality and fashion style. If you want your girls to stay active throughout the day, it is important for them to wear sports shoes that will give them good support and comfort when they are playing various sporting activities. 
+            </p>
+          </div>
+          <div class="col-md-5">
+            <a href="/store/pink-glaze/">
+            <img
+              class="featurette-image img-fluid mx-auto"
+              src="{% static 'images/sports2pink.webp' %}"
+              alt="sports girls"
+            />
+            </a>
+          </div>
+        </div>
+
+
+      </div>
+    </main>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      window.jQuery ||
+        document.write(
+          '<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>'
+        );
+    </script>
+    <!-- Just to make our placeholder images work. Don't actually copy the next line! -->
+  </body>
+</div>
+{% endblock content %}

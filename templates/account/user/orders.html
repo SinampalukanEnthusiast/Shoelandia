@@ -1,0 +1,122 @@
+{% extends "../../store/main.html" %} {% load static %} {% block content %}
+
+<main role="main" class="container">
+  <div class="container d-flex justify-content-between ">
+    <h1 class="display-4 ">Orders </h1>
+    <h5 class="text-muted mt-auto">
+      <small><a href="{% url 'dashboard' %}">Go back</a></small>
+    </h5>
+  </div>
+    <hr>
+  <h6 class="container border-gray pt-2 pb-2 mb-0 border-bottom">Recent</h6>
+
+  <div class="my-3 p-3 bg-white rounded box-shadow">
+    {% if orders %} {% for order in orders %}
+    <div class="media text-muted pt-3 border-bottom">
+
+      <div class="container">
+        <div class="row">
+          <div class="col-5">
+            <p class="media-body pb-3 mb-0 small lh-125 border-gray">
+              <strong class="text-gray-dark">{{order.full_name}} </strong>
+              <span class="text-muted">| {{order.created}}</span>
+              <br />
+              Reference ID: {{order.order_key}} <br />
+
+              {{order.address1}} {{order.address2}}, <br />
+              {{order.city}}, {{order.province}}, {{order.country_code}}, {{order.zipcode}} <br />
+              {{order.phone}}
+            </p>
+          </div>
+          <div class="col-3 d-flex justify-content-center align-items-center">
+            {% if order.billing_status %}
+            <span class="bg-success rounded p-1 m-1 text-white"> Paid</span>
+            {% elif order.is_processing %}
+            <span class="bg-warning rounded p-1 m-1 text-white">
+              Processing</span
+            >
+            {% endif %} {% if order.is_delivered %}
+            <span class="bg-success rounded p-1 m-1 text-white">
+              Delivered</span
+            >
+            {% endif %} {% if order.is_returned %}
+            <span class="bg-danger rounded p-1 m-1 text-white"> Returned</span>
+            {% endif %}
+          </div>
+          <div class="col-3">
+            <p class="media-body pb-3 mb-0 small lh-125 border-gray text-right">
+              <strong class="d-block text-gray-dark"
+                ><a href="{% url 'order_detail' order.id %}">View</a></strong
+              >
+              <strong class="d-block text-gray-dark"
+                ><a
+                  href="#"
+                  class=""
+                  data-toggle="modal"
+                  data-target="#exampleModal{{order.id}}"
+                >
+                  Return/Refund
+                </a></strong
+              >
+            </p>
+            <div
+              class="modal fade"
+              id="exampleModal{{order.id}}"
+              tabindex="-1"
+              role="dialog"
+              aria-labelledby="exampleModalLabel{{order.id}}"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel{{order.id}}">
+                      Are you sure?
+                    </h5>
+                    <button
+                      type="button"
+                      class="close"
+                      data-dismiss="modal"
+                      aria-label="Close"
+                    >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    This action can not be reversed. Please click on this
+                    <a href="#" class="btn-link">link</a> to view our return
+                    policies.
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-info"
+                      data-dismiss="modal"
+                    >
+                      Cancel
+                    </button>
+                    <a
+                      href="{% url 'return_order' order.id %}"
+                      type="button"
+                      class="btn btn-danger"
+                    >
+                      Yes, I am sure
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %} {% else %}
+    <h4 class="font-weight-light">
+      No orders yet. Click <a href="{% url 'store' %}">here</a> to start
+      shopping.
+    </h4>
+    {% endif %}
+  </div>
+</main>
+
+{% endblock content %}

@@ -1,0 +1,112 @@
+{% extends "store/main.html" %} {% load static %} {% block content %}
+
+<div class="container">
+  <div class="col-12">
+    <h1 class="display-4">Delivery Address</h1>
+  </div>
+  <hr />
+<div class="container">
+  <p class="text-muted">*Please select one to proceed</p>
+
+</div>
+</div>
+<div class="container">
+  <div class="row g-3">
+    {% if addresses|length == 0 %}
+    <div class="col-12">There are no delivery addresses, <a href="{% url 'add_address' %}">add address</a></div>
+    {% else %}
+    <div class="col-md-6">
+      {% for address in addresses %}
+      {% if not address.default %}
+
+      {% endif %}
+      <div class="card mb-3 border-1 rounded product-item me-md-4" data-index="{{option.id}}">
+        <div class="row g-0">
+          <div class="col">
+            <div class="card pb-3 rounded-0">
+              <div class="card-header bg-white small text-muted">
+                {% if address.default %}
+                                  <span
+                    class="bg-success rounded text-white p-1 font-weight-light"
+                    >Selected</span>
+                {% endif %}
+                &nbsp;
+              </div>
+              <div class="card-body small pb-1">
+                <p class="card-text m-0 "><span class="font-weight-bold text-muted">{{address.full_name}} </span> <br>
+                {{address.address_line}}, {{address.address_line2}}, {{address.city}}, {{address.zipcode}}
+                <br> Phone: {{address.phone}}</p>
+                <p class="card-text m-0"></p>
+                <p class="card-text m-0"></p>
+                <p class="card-text m-0"></p>
+                <p class="card-text m-0"></p>
+                <div class="pt-3">
+                  <a href="{% url 'edit_address' address.id %}" class="text-decoration-none">Edit</a>
+                  {% if not address.default %}
+                  | <a href="{% url 'set_default' address.id %}" class="text-decoration-none">Select</a>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+
+    </div>
+    <div class="col-md-6">
+          <h1 class="font-weight-light">Summary</h1>
+          <div class="row">
+            <div class="col">
+               <h4 class="col font-weight-light d-inline">
+                          Sub Total:
+               </h4>
+            </div>
+            <h4 class="font-weight-bold">&#x20b1;</h4>
+            <div class="col"><h4 class="col font-weight-bold" id="subtotal">
+                           {{ basket.get_subtotal }} </h4></div>
+          </div>
+          <div class="row">
+            <div class="col">
+                 <h4 class="col font-weight-light d-inline">
+                  Shipping Fee:
+                 </h4>
+            </div>
+            <h4 class="font-weight-bold">&#x20b1;</h4>
+
+            <div class="col"><h4 class="col font-weight-bold " id="shippingfee">
+                          {{basket.get_delivery_price}} </h4></div>
+          </div>
+          <hr class="featurette-divider">
+
+          <div class="row">
+            <div class="col">
+              <h4 class="col font-weight-light d-inline">
+                Total:
+               </h4>
+            </div>
+            <h4 class="font-weight-bold">&#x20b1;</h4>
+
+            <div class="col"><h4 class="col font-weight-bold" id="total">
+                {{basket.get_total_price}}</h4></div>
+          </div>
+          <div class="row pt-5 pb-5">
+              <a
+                      role="button"
+                      href="{% url 'payment_selection' %}"
+                      class="btn btn-success fw-bold w-100"
+                      type="button"
+                      >Continue</a
+                >                 
+          </div>
+          
+              
+    </div>
+    
+
+    {% endif %}
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends "../../store/main.html" %} {% load static %} {% comment %}
+<!-- formamtting comment becasue prettier is messing up my loading tagas -->
+{% endcomment %} {% load crispy_forms_tags %} {% block content %}
+
+<main class="pt-5">
+  <div class="container" style="max-width: 1000px">
+    <div class="col-12">
+      <h1 class="display-4">Edit profile</h1>
+    </div>
+    <div class="col-12 d-flex justify-content-between">
+      <div>Edit your personal details</div>
+      <div><a href="{% url 'dashboard' %}">Go back</a></div>
+    </div>
+    <hr />
+  </div>
+  <div class="container" style="max-width: 1000px">
+    <div class="container-fluid">
+      <div class="row no-gutter">
+        <div class="col-md-12">
+          <div class="login d-flex align-items-center py-5">
+            <div class="row container">
+              <div class="row">
+                <div class="col container-fluid">
+                  <form
+                    class="bootstrap4 account-form p-4 rounded col-lg-10 mx-auto"
+                    method="POST"
+                  >
+                    {% if form.is_valid %}
+                    <div class="alert alert-primary" role="alert">
+                      Details successfully updated!
+                    </div>
+                    <p class="small text-center pt-0">
+                      <a href="{% url 'dashboard' %}">Back to Dashboard</a>
+                    </p>
+                    {%else%}
+                    <h3>Change your details</h3>
+                    <p>You can edit your account using the following form:</p>
+                    {% endif %} {% if form.errors %}
+                    <div class="alert alert-primary" role="alert">
+                      Error: Please try again!
+                    </div>
+                    {% endif %} {% csrf_token %} {% crispy form %}
+                  </form>
+                </div>
+                <div class="col container-fluid">
+                  <form
+                    class="account-form px-4"
+                    action="{% url 'delete_user' %}"
+                    method="post"
+                  >
+                    {% csrf_token %}
+                    <p class="h3 pt-4 font-weight-bold">Delete Account</p>
+                    <p>Are you sure you want to delete your account?</p>
+                    <button
+                      type="submit"
+                      role="button"
+                      class="btn btn-danger btn-block py-2 mb-4 mt-5 fw-bold w-100"
+                    >
+                      Delete
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+{% endblock %}
